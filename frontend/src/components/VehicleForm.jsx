@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Save, Car } from 'lucide-react';
 
 const inputStyle = {
@@ -55,15 +56,20 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
     boxShadow: focused === name ? '0 0 0 3px rgba(99,102,241,0.12)' : 'none',
   });
 
-  return (
+  return createPortal(
     <div
-      className="rounded-2xl overflow-hidden"
-      style={{
-        background: 'rgba(21,21,31,0.9)',
-        border: '1px solid rgba(99,102,241,0.25)',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
     >
+      <div
+        className="w-full max-w-2xl rounded-2xl overflow-hidden animate-fade-in-up"
+        style={{
+          background: 'linear-gradient(145deg, rgba(21,21,31,0.97) 0%, rgba(15,15,26,0.99) 100%)',
+          border: '1px solid rgba(99,102,241,0.3)',
+          boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1)',
+        }}
+      >
       {/* Header */}
       <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(99,102,241,0.12)' }}>
         <div className="flex items-center gap-3">
@@ -192,6 +198,8 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
         </div>
       </form>
     </div>
+    </div>,
+    document.body
   );
 };
 

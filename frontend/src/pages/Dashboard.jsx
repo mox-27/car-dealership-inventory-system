@@ -141,13 +141,11 @@ const Dashboard = () => {
 
       {/* Vehicle Form */}
       {showForm && (
-        <div className="animate-fade-in-up">
-          <VehicleForm
-            vehicle={editingVehicle}
-            onSubmit={handleFormSubmit}
-            onCancel={() => { setShowForm(false); setEditingVehicle(null); }}
-          />
-        </div>
+        <VehicleForm
+          vehicle={editingVehicle}
+          onSubmit={handleFormSubmit}
+          onCancel={() => { setShowForm(false); setEditingVehicle(null); }}
+        />
       )}
 
       {/* Search filter */}
