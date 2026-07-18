@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import VehicleCard from '../components/VehicleCard';
+import SearchFilter from '../components/SearchFilter';
 import { AlertCircle, Loader2 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -8,20 +9,33 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const response = await axios.get('/api/vehicles');
-        setVehicles(response.data.vehicles);
-      } catch (err) {
-        setError('Failed to load vehicles. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVehicles();
+  const fetchVehicles = useCallback(async (filters = {}) => {
+    setLoading(true);
+    try {
+      // Build query string from filters
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) params.append(key, value);
+      });
+      
+      const endpoint = params.toString() ? `/api/vehicles/search?${params.toString()}` : '/api/vehicles';
+      const response = await axios.get(endpoint);
+      setVehicles(response.data.vehicles);
+      setError(null);
+    } catch (err) {
+      setError('Failed to load vehicles. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchVehicles();
+  }, [fetchVehicles]);
+
+  const handleSearch = (filters) => {
+    fetchVehicles(filters);
+  };
 
   if (loading) {
     return (
@@ -47,7 +61,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-end mb-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Vehicle Inventory</h1>
           <p className="mt-1 text-sm text-slate-500">
@@ -55,6 +69,8 @@ const Dashboard = () => {
           </p>
         </div>
       </div>
+
+      <SearchFilter onSearch={handleSearch} />
 
       {vehicles.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-xl border border-slate-200 border-dashed">
