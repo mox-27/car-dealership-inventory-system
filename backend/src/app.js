@@ -1,7 +1,7 @@
-import express from 'express';
-import cors from 'cors';
-import authRoutes from './routes/authRoutes.js';
-import vehicleRoutes from './routes/vehicleRoutes.js';
+import express from "express";
+import cors from "cors";
+import authRoutes from "./routes/authRoutes.js";
+import vehicleRoutes from "./routes/vehicleRoutes.js";
 
 /**
  * Creates and configures the Express application.
@@ -12,33 +12,40 @@ import vehicleRoutes from './routes/vehicleRoutes.js';
 const createApp = () => {
   const app = express();
 
-  app.use(cors());
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL || "http://localhost:5173",
+      optionsSuccessStatus: 200,
+    }),
+  );
   app.use(express.json());
 
   // Health check
-  app.get('/api/health', (_req, res) => {
-    res.json({ status: 'ok' });
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok" });
   });
 
   // Routes
-  app.use('/api/auth', authRoutes);
-  app.use('/api/vehicles', vehicleRoutes);
+  app.use("/api/auth", authRoutes);
+  app.use("/api/vehicles", vehicleRoutes);
 
   // Error handling middleware
   app.use((err, _req, res, _next) => {
     let statusCode = err.statusCode || 500;
-    let message = err.message || 'Internal Server Error';
+    let message = err.message || "Internal Server Error";
 
     // Handle Mongoose Validation Errors
-    if (err.name === 'ValidationError') {
+    if (err.name === "ValidationError") {
       statusCode = 400;
-      message = Object.values(err.errors).map(val => val.message).join(', ');
+      message = Object.values(err.errors)
+        .map((val) => val.message)
+        .join(", ");
     }
 
     // Handle Mongoose Cast Errors (invalid ObjectIDs)
-    if (err.name === 'CastError') {
+    if (err.name === "CastError") {
       statusCode = 400;
-      message = 'Resource not found';
+      message = "Resource not found";
     }
 
     res.status(statusCode).json({
@@ -53,4 +60,3 @@ const createApp = () => {
 };
 
 export default createApp;
-
