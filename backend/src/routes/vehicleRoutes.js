@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate, authorizeAdmin } from '../middleware/auth.js';
-import { create, list, update, remove } from '../controllers/vehicleController.js';
+import { create, list, update, remove, search } from '../controllers/vehicleController.js';
 
 const router = Router();
 
@@ -8,6 +8,7 @@ const router = Router();
 router.use(authenticate);
 
 router.post('/', create);
+router.get('/search', search); // Must be before /:id if we add it
 router.get('/', list);
 router.put('/:id', update);
 router.delete('/:id', authorizeAdmin, remove);

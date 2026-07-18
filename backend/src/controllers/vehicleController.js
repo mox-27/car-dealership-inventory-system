@@ -3,6 +3,7 @@ import {
   getAllVehicles,
   updateVehicle,
   deleteVehicle,
+  searchVehicles,
 } from '../services/vehicleService.js';
 
 /**
@@ -18,6 +19,15 @@ export const create = async (req, res) => {
  */
 export const list = async (_req, res) => {
   const vehicles = await getAllVehicles();
+  res.status(200).json({ vehicles });
+};
+
+/**
+ * Handles GET /api/vehicles/search — filter vehicles.
+ */
+export const search = async (req, res) => {
+  const { make, model, category, minPrice, maxPrice } = req.query;
+  const vehicles = await searchVehicles({ make, model, category, minPrice, maxPrice });
   res.status(200).json({ vehicles });
 };
 

@@ -20,6 +20,28 @@ export const getAllVehicles = async () => {
 };
 
 /**
+ * Searches for vehicles based on query filters.
+ * @param {Object} query - { make, model, category, minPrice, maxPrice }
+ * @returns {Promise<Array>} List of filtered vehicles
+ */
+export const searchVehicles = async ({ make, model, category, minPrice, maxPrice }) => {
+  const filter = {};
+
+  if (make) filter.make = new RegExp(make, 'i');
+  if (model) filter.model = new RegExp(model, 'i');
+  if (category) filter.category = new RegExp(category, 'i');
+
+  if (minPrice !== undefined || maxPrice !== undefined) {
+    filter.price = {};
+    if (minPrice !== undefined) filter.price.$gte = Number(minPrice);
+    if (maxPrice !== undefined) filter.price.$lte = Number(maxPrice);
+  }
+
+  const vehicles = await Vehicle.find(filter);
+  return vehicles;
+};
+
+/**
  * Retrieves a single vehicle by ID.
  * @param {string} id - Vehicle ID
  * @returns {Promise<Object|null>} The vehicle or null
