@@ -1,16 +1,45 @@
-# React + Vite
+# AutoVerse Dealership - Frontend SPA
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+This is the React frontend for the AutoVerse Car Dealership Inventory System. It was built using Vite, React (Functional Components + Hooks), Tailwind CSS v4, and React Testing Library + Vitest.
 
-Currently, two official plugins are available:
+## Prerequisites
+- Node.js (v18 or higher recommended)
+- The [Backend API](../backend/README.md) must be running.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Getting Started
 
-## React Compiler
+1. **Install Dependencies**
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. **Environment Variables**
+   The frontend expects to communicate with the backend on `/api`. In development, Vite is configured to proxy API requests to the backend server (typically `http://localhost:3000`). If your backend is hosted elsewhere, you can set the `VITE_API_URL` environment variable or adjust the proxy in `vite.config.js`.
 
-## Expanding the Oxlint configuration
+3. **Start Development Server**
+   ```bash
+   npm run dev
+   ```
+   The application will be available at `http://localhost:5173`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Running Tests
+
+This project follows a Test-Driven Development (TDD) approach using Vitest and React Testing Library.
+
+```bash
+# Run tests once
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+## Features
+- **Public**: Browse inventory, search by make/model, filter by category and price.
+- **Authentication**: JWT-based login and registration.
+- **Customers**: Purchase vehicles (decrements stock).
+- **Admins**: Add, edit, delete, and restock vehicles.
+
+## Screenshots
+*(Add screenshots here after running the application)*
