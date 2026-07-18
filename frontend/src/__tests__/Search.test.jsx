@@ -7,10 +7,10 @@ describe('SearchFilter Component', () => {
   it('renders search input and filter fields', () => {
     render(<SearchFilter onSearch={vi.fn()} />);
     
-    expect(screen.getByPlaceholderText(/search make or model/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/e\.g\. toyota/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/min price/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/max price/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/^0$/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/any/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
   });
 
@@ -20,10 +20,9 @@ describe('SearchFilter Component', () => {
     
     const user = userEvent.setup();
     
-    await user.type(screen.getByPlaceholderText(/search make or model/i), 'Toyota');
-    // Using selectOptions for select element if it's a native select
+    await user.type(screen.getByPlaceholderText(/e\.g\. toyota/i), 'Toyota');
     await user.selectOptions(screen.getByLabelText(/category/i), 'SUV');
-    await user.type(screen.getByPlaceholderText(/min price/i), '20000');
+    await user.type(screen.getByPlaceholderText(/^0$/i), '20000');
     
     await user.click(screen.getByRole('button', { name: /search/i }));
     
@@ -41,10 +40,10 @@ describe('SearchFilter Component', () => {
     
     const user = userEvent.setup();
     
-    await user.type(screen.getByPlaceholderText(/search make or model/i), 'Toyota');
-    await user.click(screen.getByRole('button', { name: /reset/i }));
+    await user.type(screen.getByPlaceholderText(/e\.g\. toyota/i), 'Toyota');
+    await user.click(screen.getByTitle(/reset filters/i));
     
-    expect(screen.getByPlaceholderText(/search make or model/i)).toHaveValue('');
+    expect(screen.getByPlaceholderText(/e\.g\. toyota/i)).toHaveValue('');
     expect(mockOnSearch).toHaveBeenCalledWith({
       make: '',
       category: '',

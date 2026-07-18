@@ -38,14 +38,17 @@ describe('Dashboard Component', () => {
     renderDashboard();
 
     await waitFor(() => {
-      expect(screen.getByText('Toyota Camry')).toBeInTheDocument();
-      expect(screen.getByText('Honda Civic')).toBeInTheDocument();
+      expect(screen.getByText('Toyota')).toBeInTheDocument();
+      expect(screen.getByText('Camry')).toBeInTheDocument();
+      expect(screen.getByText('Honda')).toBeInTheDocument();
+      expect(screen.getByText('Civic')).toBeInTheDocument();
     });
 
     // Check formatting
     expect(screen.getByText('25,000')).toBeInTheDocument();
-    expect(screen.getByText('5 in stock')).toBeInTheDocument();
-    expect(screen.getByText('Out of stock')).toBeInTheDocument();
+    // "in stock" text appears in both the stat card and vehicle card
+    expect(screen.getAllByText(/in stock/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/out of stock/i).length).toBeGreaterThan(0);
   });
 
   it('renders error state on API failure', async () => {

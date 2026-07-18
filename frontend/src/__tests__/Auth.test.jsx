@@ -29,7 +29,7 @@ describe('Auth Flow', () => {
   describe('Login Component', () => {
     it('renders login form', () => {
       renderWithRouterAndAuth(<Login />);
-      expect(screen.getByRole('heading', { name: /sign in/i })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument();
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
@@ -56,11 +56,11 @@ describe('Auth Flow', () => {
   describe('Register Component', () => {
     it('renders register form', () => {
       renderWithRouterAndAuth(<Register />);
-      expect(screen.getByRole('heading', { name: /create account/i })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /join autoverse/i })).toBeInTheDocument();
       expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /register/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /create account/i })).toBeInTheDocument();
     });
 
     it('shows error on failed registration', async () => {
@@ -74,7 +74,7 @@ describe('Auth Flow', () => {
       await user.type(screen.getByLabelText(/name/i), 'Test User');
       await user.type(screen.getByLabelText(/email/i), 'test@example.com');
       await user.type(screen.getByLabelText(/password/i), 'password123');
-      await user.click(screen.getByRole('button', { name: /register/i }));
+      await user.click(screen.getByRole('button', { name: /create account/i }));
 
       await waitFor(() => {
         expect(screen.getByText(/email already exists/i)).toBeInTheDocument();
