@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
-              <Route path="/" element={<div className="p-4 bg-white rounded shadow text-center">Dashboard Placeholder</div>} />
+              <Route path="/" element={<Dashboard />} />
             </Route>
           </Route>
         </Routes>

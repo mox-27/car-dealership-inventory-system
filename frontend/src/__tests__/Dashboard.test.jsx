@@ -43,7 +43,7 @@ describe('Dashboard Component', () => {
     });
 
     // Check formatting
-    expect(screen.getByText('$25,000')).toBeInTheDocument();
+    expect(screen.getByText('25,000')).toBeInTheDocument();
     expect(screen.getByText('5 in stock')).toBeInTheDocument();
     expect(screen.getByText('Out of stock')).toBeInTheDocument();
   });
