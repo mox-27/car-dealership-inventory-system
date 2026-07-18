@@ -11,7 +11,7 @@ const Layout = () => {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--paper)]">
+    <div className="h-screen overflow-hidden flex flex-col bg-[var(--paper)]">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[var(--paper)] spec-border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,7 +70,7 @@ const Layout = () => {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col overflow-hidden">
         <Outlet />
       </main>
 

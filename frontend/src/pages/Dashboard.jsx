@@ -82,9 +82,9 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 relative">
+    <div className="flex flex-col h-full gap-6 relative overflow-hidden">
       {/* Page header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div className="flex-shrink-0 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <p className="text-xs font-mono uppercase tracking-widest mb-1 text-[var(--text-muted)]">
             AutoVerse Inventory System
@@ -105,7 +105,7 @@ const Dashboard = () => {
       </div>
 
       {/* Stats row */}
-      <div className="spec-panel flex flex-row justify-between w-full divide-x divide-[var(--line)]">
+      <div className="flex-shrink-0 spec-panel flex flex-row justify-between w-full divide-x divide-[var(--line)]">
         <div className="flex-1"><StatItem label="Total Models" value={totalVehicles} /></div>
         <div className="flex-1"><StatItem label="In Stock" value={inStock} /></div>
         <div className="flex-1"><StatItem label="Out of Stock" value={totalVehicles - inStock} /></div>
@@ -121,14 +121,14 @@ const Dashboard = () => {
       )}
 
       {/* Content Area with Sidebar */}
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-6 overflow-hidden">
         {/* Sidebar */}
-        <div className="w-full lg:w-64 xl:w-72 flex-shrink-0">
+        <div className="w-full lg:w-64 xl:w-72 flex-shrink-0 overflow-y-auto pr-2">
           <SearchFilter onSearch={handleSearch} />
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 overflow-y-auto pr-2 pb-4">
           {/* Vehicle grid */}
           {loading ? (
             <div className="flex justify-center py-16">
