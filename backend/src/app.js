@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
+import vehicleRoutes from './routes/vehicleRoutes.js';
 
 /**
  * Creates and configures the Express application.
@@ -21,6 +22,7 @@ const createApp = () => {
 
   // Routes
   app.use('/api/auth', authRoutes);
+  app.use('/api/vehicles', vehicleRoutes);
 
   // Error handling middleware
   app.use((err, _req, res, _next) => {
