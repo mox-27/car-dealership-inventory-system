@@ -21,12 +21,14 @@ project-root/
 You will need two terminal windows to run the full stack application.
 
 1. **Start the Backend**
+
    ```bash
    cd backend
    npm install
    npm start
    ```
-   *(Backend runs on http://localhost:3000)*
+
+   _(Backend runs on http://localhost:3000)_
 
 2. **Start the Frontend**
    ```bash
@@ -34,8 +36,37 @@ You will need two terminal windows to run the full stack application.
    npm install
    npm run dev
    ```
-   *(Frontend runs on http://localhost:5173 and proxies API calls to the backend)*
+   _(Frontend runs on http://localhost:5173 and proxies API calls to the backend)_
 
 ## My AI Usage
 
-_To be filled in manually._
+**AI Tool Used**: Google Gemini, Claude (via an integrated Agentic AI coding assistant)
+
+**How it was used**:
+
+- **Boilerplate & Scaffolding**: I used the AI to generate the initial Vite React frontend and Express backend boilerplate.
+- **Test-Driven Development (TDD)**: The AI was prompted to strictly follow a Red-Green-Refactor cycle. It wrote the failing tests first using Vitest and Jest, and then implemented the business logic in the backend controllers/services and frontend components to make them pass.
+- **UI & Aesthetics**: I asked the AI to ensure the application used a beautiful, responsive, modern design using Tailwind CSS v4 and Lucide React icons.
+- **Documentation**: The AI generated this README file, the `PROMPTS.md` chat log, and a detailed walkthrough of the final implementation.
+
+**Reflection**:
+Using an agentic AI coding assistant significantly accelerated the development process. Instead of manually writing boilerplate CRUD logic and basic component layouts, I was able to act as the architect and product manager, directing the AI through the strict requirements of the Kata. The AI handled the context switching between backend and frontend seamlessly. The strict TDD requirement helped keep the AI's implementations focused and bug-free, preventing it from hallucinating logic that wasn't covered by tests.
+
+## Test Report
+
+The project maintains high test coverage across both the backend and frontend.
+
+### Backend Tests
+
+```
+Test Suites: 6 passed, 6 total
+Tests:       31 passed, 31 total
+Coverage:    95.13% Lines
+```
+
+### Frontend Tests
+
+```
+Test Suites: 6 passed, 6 total
+Tests:       24 passed, 24 total
+```
