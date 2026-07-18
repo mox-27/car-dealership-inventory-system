@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import authRoutes from './routes/authRoutes.js';
 
 /**
  * Creates and configures the Express application.
@@ -18,7 +19,22 @@ const createApp = () => {
     res.json({ status: 'ok' });
   });
 
+  // Routes
+  app.use('/api/auth', authRoutes);
+
+  // Error handling middleware
+  app.use((err, _req, res, _next) => {
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+      error: {
+        message: err.message || 'Internal Server Error',
+        status: statusCode,
+      },
+    });
+  });
+
   return app;
 };
 
 export default createApp;
+
