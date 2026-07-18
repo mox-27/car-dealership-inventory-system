@@ -3,10 +3,11 @@ import axios from 'axios';
 import { Car, Package, DollarSign, ShoppingCart, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const VehicleCard = ({ vehicle, onUpdate }) => {
+const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { token } = useAuth(); // Just checking if they are logged in
+  const { token, user } = useAuth();
+  const isAdmin = user?.role === 'admin';
 
   const handlePurchase = async () => {
     setLoading(true);
@@ -17,6 +18,35 @@ const VehicleCard = ({ vehicle, onUpdate }) => {
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Purchase failed');
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete the ${vehicle.make} ${vehicle.model}?`)) return;
+    
+    setLoading(true);
+    try {
+      await axios.delete(`/api/vehicles/${vehicle._id}`);
+      if (onUpdate) onUpdate();
+    } catch (err) {
+      setError(err.response?.data?.error?.message || 'Delete failed');
+      setLoading(false);
+    }
+  };
+
+  const handleRestock = async () => {
+    const qtyStr = window.prompt(`How many ${vehicle.make} ${vehicle.model}s to add to inventory?`);
+    if (!qtyStr) return;
+    const qty = parseInt(qtyStr, 10);
+    if (isNaN(qty) || qty <= 0) return;
+
+    setLoading(true);
+    try {
+      await axios.post(`/api/vehicles/${vehicle._id}/restock`, { quantity: qty });
+      if (onUpdate) onUpdate();
+    } catch (err) {
+      setError(err.response?.data?.error?.message || 'Restock failed');
       setLoading(false);
     }
   };
@@ -68,6 +98,32 @@ const VehicleCard = ({ vehicle, onUpdate }) => {
           )}
           {isOutOfStock ? 'Out of Stock' : 'Purchase'}
         </button>
+
+        {isAdmin && (
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            <button
+              onClick={onEdit}
+              disabled={loading}
+              className="flex items-center justify-center py-1.5 px-2 border border-slate-300 rounded text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              Edit
+            </button>
+            <button
+              onClick={handleDelete}
+              disabled={loading}
+              className="flex items-center justify-center py-1.5 px-2 border border-red-200 rounded text-xs font-medium text-red-600 hover:bg-red-50 transition-colors"
+            >
+              Delete
+            </button>
+            <button
+              onClick={handleRestock}
+              disabled={loading}
+              className="flex items-center justify-center py-1.5 px-2 border border-green-200 rounded text-xs font-medium text-green-700 hover:bg-green-50 transition-colors"
+            >
+              Restock
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

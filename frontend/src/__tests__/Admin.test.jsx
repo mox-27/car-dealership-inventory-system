@@ -47,6 +47,7 @@ describe('Admin Controls', () => {
       vi.spyOn(AuthContextModule, 'useAuth').mockReturnValue({ user: { role: 'admin' } });
       const mockOnUpdate = vi.fn();
       axios.delete.mockResolvedValueOnce({ data: {} });
+      vi.spyOn(window, 'confirm').mockReturnValue(true);
       
       render(<VehicleCard vehicle={mockVehicle} onUpdate={mockOnUpdate} />);
       const user = userEvent.setup();
