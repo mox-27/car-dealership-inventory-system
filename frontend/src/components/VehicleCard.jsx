@@ -115,7 +115,7 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
                   const v = parseInt(e.target.value, 10);
                   if (!isNaN(v) && v >= 1) setQty(v);
                 }}
-                className="flex-1 text-center text-xl font-bold rounded-xl py-2 no-spinner"
+                className="flex-1 min-w-0 text-center text-xl font-bold rounded-xl py-2 no-spinner"
                 style={{
                   background: 'rgba(99,102,241,0.08)',
                   border: '1px solid rgba(99,102,241,0.25)',
