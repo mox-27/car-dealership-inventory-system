@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 /**
  * Connects to MongoDB using the URI from environment variables.
@@ -6,8 +6,10 @@ import mongoose from 'mongoose';
  * @returns {Promise<void>}
  */
 const connectDB = async () => {
-  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/car-dealership';
-  await mongoose.connect(uri);
+  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
+  await mongoose.connect(uri, {
+    dbName: process.env.DB_NAME || "car-dealership",
+  });
   console.log(`MongoDB connected: ${mongoose.connection.host}`);
 };
 
