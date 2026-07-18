@@ -1,4 +1,7 @@
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 
 /**
  * Registers a new user in the database.
@@ -7,6 +10,13 @@ import User from '../models/User.js';
  * @throws {Error} If email already exists or validation fails
  */
 export const registerUser = async ({ name, email, password, role }) => {
+  // Validate required fields
+  if (!name || !email || !password) {
+    const error = new Error('Name, email, and password are required');
+    error.statusCode = 400;
+    throw error;
+  }
+
   // Check for existing email first for a cleaner error message
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -21,4 +31,34 @@ export const registerUser = async ({ name, email, password, role }) => {
   const userObj = user.toObject();
   delete userObj.password;
   return userObj;
+};
+
+/**
+ * Authenticates a user and returns a JWT.
+ * @param {Object} credentials - { email, password }
+ * @returns {Promise<string>} JWT token
+ * @throws {Error} If credentials are invalid
+ */
+export const loginUser = async ({ email, password }) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    const error = new Error('Invalid email or password');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+    const error = new Error('Invalid email or password');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const token = jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+
+  return token;
 };
