@@ -142,6 +142,7 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
               type="number"
               id="price"
               name="price"
+              className='no-spinner'
               min="0"
               required
               placeholder="e.g. 2000000"
@@ -159,6 +160,7 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
               type="number"
               id="quantity"
               name="quantity"
+              className='no-spinner'
               min="0"
               required
               placeholder="e.g. 5"

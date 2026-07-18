@@ -119,6 +119,7 @@ const SearchFilter = ({ onSearch }) => {
               type="number"
               id="minPrice"
               name="minPrice"
+              className='no-spinner'
               placeholder="0"
               min="0"
               value={filters.minPrice}
@@ -136,6 +137,7 @@ const SearchFilter = ({ onSearch }) => {
               type="number"
               id="maxPrice"
               name="maxPrice"
+              className='no-spinner'
               placeholder="Any"
               min="0"
               value={filters.maxPrice}
