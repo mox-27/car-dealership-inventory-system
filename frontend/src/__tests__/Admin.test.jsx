@@ -72,7 +72,7 @@ describe('Admin Controls', () => {
       await user.click(screen.getByRole('button', { name: /restock/i }));
       
       // The modal should now be visible
-      expect(screen.getByText('Restock Vehicle')).toBeInTheDocument();
+      expect(screen.getByText(/restock vehicle/i)).toBeInTheDocument();
       
       // Select all and type a new value so it replaces the default '1'
       const qtyInput = screen.getByRole('spinbutton');
@@ -80,7 +80,7 @@ describe('Admin Controls', () => {
       await user.keyboard('5');
       
       // Click the confirm button
-      await user.click(screen.getByRole('button', { name: /restock 5 unit/i }));
+      await user.click(screen.getByRole('button', { name: /confirm/i }));
       
       expect(axios.post).toHaveBeenCalledWith('/api/vehicles/123/restock', { quantity: 5 });
       await waitFor(() => {
@@ -101,7 +101,7 @@ describe('Admin Controls', () => {
       expect(screen.getByLabelText(/model/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/price/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/quantity/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/initial qty/i)).toBeInTheDocument();
     });
   });
 });

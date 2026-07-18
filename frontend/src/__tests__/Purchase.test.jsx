@@ -33,7 +33,7 @@ describe('VehicleCard Purchase Flow', () => {
 
   it('renders a disabled Purchase button when out of stock', () => {
     render(<VehicleCard vehicle={{ ...mockVehicle, quantity: 0 }} onUpdate={mockOnUpdate} />);
-    const button = screen.getByRole('button', { name: /out of stock/i });
+    const button = screen.getByRole('button', { name: /unavailable/i });
     expect(button).toBeInTheDocument();
     expect(button).toBeDisabled();
   });

@@ -7,15 +7,10 @@ import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package } from 'lucide-rea
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
-const StatCard = ({ icon: Icon, label, value, color }) => (
-  <div className="rounded-2xl p-4 flex items-center gap-4 glass">
-    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: color + '20', border: `1px solid ${color}30` }}>
-      <Icon className="h-5 w-5" style={{ color }} />
-    </div>
-    <div>
-      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{label}</p>
-      <p className="text-xl font-700 text-[var(--text-primary)]">{value}</p>
-    </div>
+const StatItem = ({ label, value }) => (
+  <div className="p-4 flex flex-col justify-center items-center text-center">
+    <p className="text-3xl font-mono text-[var(--ink)] tracking-tight">{value}</p>
+    <p className="text-xs font-mono uppercase tracking-widest text-[var(--text-muted)] mt-1">{label}</p>
   </div>
 );
 
@@ -81,12 +76,7 @@ const Dashboard = () => {
   if (loading && vehicles.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]" data-testid="loading-spinner">
-        <div className="relative">
-          <div className="w-16 h-16 rounded-full" style={{ border: '2px solid var(--border-subtle)' }} />
-          <div className="absolute inset-0 w-16 h-16 rounded-full animate-spin" style={{ border: '2px solid transparent', borderTopColor: 'var(--color-primary)' }} />
-          <Car className="absolute inset-0 m-auto h-6 w-6 animate-pulse text-[var(--color-primary)]" />
-        </div>
-        <p className="mt-5 text-sm font-medium text-[var(--text-muted)]">Loading inventory...</p>
+        <p className="text-xs font-mono uppercase tracking-widest text-[var(--text-muted)] animate-pulse">LOADING INVENTORY...</p>
       </div>
     );
   }
@@ -96,20 +86,17 @@ const Dashboard = () => {
       {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-1 text-[var(--color-primary)]">
-            AutoVerse Dealership
+          <p className="text-xs font-mono uppercase tracking-widest mb-1 text-[var(--text-muted)]">
+            AutoVerse Inventory System
           </p>
-          <h1 className="text-3xl font-display font-800 text-[var(--text-primary)]">
-            Vehicle <span className="gradient-text">Inventory</span>
+          <h1 className="text-4xl font-display text-[var(--ink)]">
+            Vehicle Inventory
           </h1>
-          <p className="mt-1 text-sm text-[var(--text-muted)]">
-            Browse and purchase from our premium collection
-          </p>
         </div>
         {isAdmin && (
           <button
             onClick={() => { setEditingVehicle(null); setShowForm(true); }}
-            className="btn-primary flex items-center gap-2 px-5 py-2.5 text-sm self-start sm:self-end"
+            className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs self-start sm:self-end"
           >
             <Plus className="h-4 w-4" />
             Add Vehicle
@@ -118,15 +105,10 @@ const Dashboard = () => {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-        <StatCard icon={Car} label="Total Models" value={totalVehicles} color="#6366f1" />
-        <StatCard icon={Package} label="In Stock" value={inStock} color="#10b981" />
-        <StatCard
-          icon={TrendingUp}
-          label="Out of Stock"
-          value={totalVehicles - inStock}
-          color="#f59e0b"
-        />
+      <div className="spec-panel flex flex-row justify-between w-full divide-x divide-[var(--line)]">
+        <div className="flex-1"><StatItem label="Total Models" value={totalVehicles} /></div>
+        <div className="flex-1"><StatItem label="In Stock" value={inStock} /></div>
+        <div className="flex-1"><StatItem label="Out of Stock" value={totalVehicles - inStock} /></div>
       </div>
 
       {/* Vehicle Form */}
@@ -138,40 +120,43 @@ const Dashboard = () => {
         />
       )}
 
-      {/* Search filter */}
-      <SearchFilter onSearch={handleSearch} />
+      {/* Content Area with Sidebar */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Sidebar */}
+        <div className="w-full lg:w-64 xl:w-72 flex-shrink-0">
+          <SearchFilter onSearch={handleSearch} />
+        </div>
 
-      {/* Vehicle grid */}
-      {loading ? (
-        <div className="flex justify-center py-16">
-          <Loader2 className="h-8 w-8 animate-spin text-[var(--color-primary)]" />
-        </div>
-      ) : vehicles.length === 0 ? (
-        <div
-          className="text-center py-20 rounded-2xl glass"
-          style={{ borderStyle: 'dashed' }}
-        >
-          <Car className="h-10 w-10 mx-auto mb-3 opacity-30 text-[var(--color-primary)]" />
-          <p className="text-base font-medium text-[var(--text-muted)]">No vehicles found</p>
-          <p className="text-sm mt-1 text-[var(--text-secondary)]">Try adjusting your filters</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {vehicles.map((vehicle, i) => (
-            <div
-              key={vehicle._id}
-              className="animate-fade-in-up"
-              style={{ animationDelay: `${i * 60}ms`, animationFillMode: 'both' }}
-            >
-              <VehicleCard
-                vehicle={vehicle}
-                onUpdate={handleUpdate}
-                onEdit={() => handleEdit(vehicle)}
-              />
+        {/* Main Content */}
+        <div className="flex-1 min-w-0">
+          {/* Vehicle grid */}
+          {loading ? (
+            <div className="flex justify-center py-16">
+              <p className="text-xs font-mono uppercase tracking-widest text-[var(--text-muted)] animate-pulse">UPDATING...</p>
             </div>
-          ))}
+          ) : vehicles.length === 0 ? (
+            <div className="spec-panel text-center py-20">
+              <p className="text-sm font-mono uppercase tracking-widest text-[var(--ink)]">No vehicles match these filters</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {vehicles.map((vehicle, i) => (
+                <div
+                  key={vehicle._id}
+                  className="animate-fade-in-up"
+                  style={{ animationDelay: `${i * 60}ms`, animationFillMode: 'both' }}
+                >
+                  <VehicleCard
+                    vehicle={vehicle}
+                    onUpdate={handleUpdate}
+                    onEdit={() => handleEdit(vehicle)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

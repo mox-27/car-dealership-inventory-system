@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, Mail, Lock, ArrowRight, Car } from 'lucide-react';
+import { Mail, Lock, Car, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Login = () => {
@@ -27,40 +27,33 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: 'var(--gradient-page)' }}>
-      {/* Background effects */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)', filter: 'blur(40px)' }} />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #7c3aed 0%, transparent 70%)', filter: 'blur(40px)' }} />
-        <div className="grid-bg absolute inset-0" />
-      </div>
-
-      <div className="relative w-full max-w-md mx-auto px-4 py-8 animate-fade-in-up">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 glow" style={{ background: 'linear-gradient(135deg, #6366f1, #7c3aed)' }}>
-            <Car className="h-8 w-8 text-white animate-float" />
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-sm spec-panel animate-fade-in-up">
+        {/* Header */}
+        <div className="p-6 spec-border-b text-center bg-[var(--paper)]">
+          <div className="inline-flex items-center justify-center mb-4 text-[var(--ink)]">
+            <Car className="h-8 w-8" />
           </div>
-          <h1 className="font-display text-3xl font-800 text-[var(--text-primary)]">Welcome back</h1>
-          <p className="mt-2 text-[var(--text-secondary)] text-sm">Sign in to your AutoVerse account</p>
+          <h1 className="font-display text-3xl text-[var(--ink)] tracking-widest uppercase">AutoVerse</h1>
+          <p className="font-mono text-xs text-[var(--text-secondary)] mt-1 uppercase tracking-widest">Authorized Personnel Only</p>
         </div>
 
-        {/* Card */}
-        <div className="glass-strong rounded-2xl p-8">
+        {/* Form body */}
+        <div className="p-6 bg-[var(--panel)]">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                Email address
+              <label htmlFor="email" className="block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase">
+                Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)] pointer-events-none" />
                 <input
                   id="email"
                   name="email"
                   type="email"
                   required
-                  placeholder="you@example.com"
-                  className="input-dark w-full pl-10 pr-4 py-3 rounded-xl text-sm"
+                  placeholder="name@dealership.com"
+                  className="input-theme w-full pl-10 pr-4 py-3 text-sm font-mono"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -68,18 +61,18 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+              <label htmlFor="password" className="block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)] pointer-events-none" />
                 <input
                   id="password"
                   name="password"
                   type="password"
                   required
                   placeholder="••••••••"
-                  className="input-dark w-full pl-10 pr-4 py-3 rounded-xl text-sm"
+                  className="input-theme w-full pl-10 pr-4 py-3 text-sm font-mono"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -89,25 +82,24 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-3 px-6 flex items-center justify-center gap-2 text-sm"
+              className="btn-signal w-full py-3 px-6 flex items-center justify-center gap-2 mt-4"
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <>
-                  Sign in
-                  <ArrowRight className="h-4 w-4" />
-                </>
+                'AUTHENTICATE'
               )}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-[var(--text-muted)]">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-primary font-medium hover:text-primary-light transition-colors">
-              Create one free
-            </Link>
-          </p>
+          <div className="mt-6 pt-5 spec-border-t text-center">
+            <p className="font-mono text-xs text-[var(--text-muted)] uppercase">
+              NO ACCOUNT?{' '}
+              <Link to="/register" className="text-[var(--ink)] font-bold hover:underline underline-offset-4 decoration-[var(--signal)]">
+                REGISTER
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

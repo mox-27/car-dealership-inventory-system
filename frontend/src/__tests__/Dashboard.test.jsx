@@ -45,10 +45,8 @@ describe('Dashboard Component', () => {
     renderDashboard();
 
     await waitFor(() => {
-      expect(screen.getByText('Toyota')).toBeInTheDocument();
-      expect(screen.getByText('Camry')).toBeInTheDocument();
-      expect(screen.getByText('Honda')).toBeInTheDocument();
-      expect(screen.getByText('Civic')).toBeInTheDocument();
+      expect(screen.getByText('Toyota Camry')).toBeInTheDocument();
+      expect(screen.getByText('Honda Civic')).toBeInTheDocument();
     });
 
     // Check formatting

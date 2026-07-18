@@ -1,31 +1,10 @@
 import { useState } from 'react';
 import { Search, X, SlidersHorizontal, ChevronDown } from 'lucide-react';
 
-const inputStyle = {
-  background: 'var(--bg-input)',
-  border: '1px solid var(--border-primary)',
-  color: 'var(--text-primary)',
-  borderRadius: '0.75rem',
-  padding: '0.625rem 0.875rem',
-  fontSize: '0.8125rem',
-  width: '100%',
-  outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
-};
-
-const labelStyle = {
-  display: 'block',
-  fontSize: '0.7rem',
-  fontWeight: '600',
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  color: 'var(--text-secondary)',
-  marginBottom: '0.375rem',
-};
+const labelStyle = "block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase tracking-widest";
 
 const SearchFilter = ({ onSearch }) => {
   const [filters, setFilters] = useState({ make: '', category: '', minPrice: '', maxPrice: '' });
-  const [focused, setFocused] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,118 +22,98 @@ const SearchFilter = ({ onSearch }) => {
     onSearch(reset);
   };
 
-  const getFocusedStyle = (name) => ({
-    ...inputStyle,
-    borderColor: focused === name ? 'var(--color-primary)' : 'var(--border-primary)',
-    boxShadow: focused === name ? '0 0 0 3px var(--border-subtle)' : 'none',
-  });
-
   return (
-    <form onSubmit={handleSubmit} className="mb-6">
-      <div className="rounded-2xl p-4 glass">
-        <div className="flex items-center gap-2 mb-3">
-          <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--color-primary)]" />
-          <span style={{ fontSize: '0.7rem', fontWeight: '600', letterSpacing: '0.08em', textTransform: 'uppercase' }} className="text-[var(--text-secondary)]">
-            Filter Vehicles
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="spec-panel p-5 h-full">
+        <div className="flex items-center gap-2 mb-6">
+          <SlidersHorizontal className="h-4 w-4 text-[var(--ink)]" />
+          <span className="font-display text-lg text-[var(--ink)] tracking-widest">
+            FILTER INVENTORY
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+        <div className="flex flex-col gap-5">
           {/* Make / Model */}
-          <div className="lg:col-span-1">
-            <label style={labelStyle}>Make / Model</label>
+          <div>
+            <label className={labelStyle}>Make / Model</label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none text-[var(--text-muted)]" />
               <input
                 type="text"
                 id="make"
                 name="make"
-                placeholder="e.g. Toyota"
+                placeholder="e.g. TOYOTA"
                 value={filters.make}
                 onChange={handleChange}
-                onFocus={() => setFocused('make')}
-                onBlur={() => setFocused(null)}
-                style={{ ...getFocusedStyle('make'), paddingLeft: '2.25rem' }}
+                className="input-theme w-full p-2.5 font-mono text-sm pl-9 uppercase"
               />
             </div>
           </div>
 
           {/* Category */}
-          <div className="lg:col-span-1">
-            <label htmlFor="category" style={labelStyle}>Category</label>
+          <div>
+            <label htmlFor="category" className={labelStyle}>Category</label>
             <div className="relative">
               <select
                 id="category"
                 name="category"
                 value={filters.category}
                 onChange={handleChange}
-                onFocus={() => setFocused('category')}
-                onBlur={() => setFocused(null)}
-                style={{ ...getFocusedStyle('category'), appearance: 'none', paddingRight: '2rem' }}
-                className="bg-[var(--bg-input)]"
+                className="input-theme w-full p-2.5 font-mono text-sm pr-9 uppercase"
+                style={{ appearance: 'none' }}
               >
-                <option value="" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">All Categories</option>
-                <option value="Sedan" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">Sedan</option>
-                <option value="SUV" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">SUV</option>
-                <option value="Truck" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">Truck</option>
-                <option value="Coupe" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">Coupe</option>
-                <option value="Hatchback" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">Hatchback</option>
-                <option value="Sports" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">Sports</option>
-                <option value="Van" className="bg-[var(--bg-page-secondary)] text-[var(--text-primary)]">Van</option>
+                <option value="">ALL CATEGORIES</option>
+                {['Sedan', 'SUV', 'Truck', 'Coupe', 'Hatchback', 'Sports', 'Van'].map((cat) => (
+                  <option key={cat} value={cat}>{cat.toUpperCase()}</option>
+                ))}
               </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none text-[var(--text-muted)]" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-[var(--text-muted)]" />
             </div>
           </div>
 
           {/* Min Price */}
-          <div className="lg:col-span-1">
-            <label style={labelStyle}>Min Price (₹)</label>
+          <div>
+            <label className={labelStyle}>Min Price (INR)</label>
             <input
               type="number"
               id="minPrice"
               name="minPrice"
-              className='no-spinner'
+              className="input-theme w-full p-2.5 no-spinner font-mono text-sm"
               placeholder="0"
               min="0"
               value={filters.minPrice}
               onChange={handleChange}
-              onFocus={() => setFocused('minPrice')}
-              onBlur={() => setFocused(null)}
-              style={getFocusedStyle('minPrice')}
             />
           </div>
 
           {/* Max Price */}
-          <div className="lg:col-span-1">
-            <label style={labelStyle}>Max Price (₹)</label>
+          <div>
+            <label className={labelStyle}>Max Price (INR)</label>
             <input
               type="number"
               id="maxPrice"
               name="maxPrice"
-              className='no-spinner'
-              placeholder="Any"
+              className="input-theme w-full p-2.5 no-spinner font-mono text-sm"
+              placeholder="ANY"
               min="0"
               value={filters.maxPrice}
               onChange={handleChange}
-              onFocus={() => setFocused('maxPrice')}
-              onBlur={() => setFocused(null)}
-              style={getFocusedStyle('maxPrice')}
             />
           </div>
 
           {/* Actions */}
-          <div className="lg:col-span-1 flex gap-2">
+          <div className="flex gap-2 pt-2">
             <button
               type="submit"
-              className="btn-primary flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm"
+              className="btn-primary flex-1 flex items-center justify-center gap-2 py-2.5 text-xs h-[42px]"
             >
               <Search className="h-3.5 w-3.5" />
-              Search
+              SEARCH
             </button>
             <button
               type="button"
               onClick={handleReset}
-              className="flex items-center justify-center px-3 py-2.5 rounded-xl text-sm transition-all bg-[var(--bg-input)] text-[var(--text-muted)] border border-[var(--border-subtle)] hover:bg-[var(--bg-input-hover)]"
+              className="btn-outline flex items-center justify-center px-4 h-[42px]"
               title="Reset Filters"
             >
               <X className="h-4 w-4" />

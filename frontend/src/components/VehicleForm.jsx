@@ -1,32 +1,10 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Save, Car } from 'lucide-react';
-
-const inputStyle = {
-  background: 'var(--bg-input)',
-  border: '1px solid var(--border-primary)',
-  color: 'var(--text-primary)',
-  borderRadius: '0.75rem',
-  padding: '0.625rem 0.875rem',
-  fontSize: '0.875rem',
-  width: '100%',
-  outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
-};
-
-const labelStyle = {
-  display: 'block',
-  fontSize: '0.75rem',
-  fontWeight: '600',
-  color: 'var(--text-secondary)',
-  marginBottom: '0.375rem',
-};
 
 const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     make: '', model: '', category: 'Sedan', price: '', quantity: '',
   });
-  const [focused, setFocused] = useState(null);
 
   useEffect(() => {
     if (vehicle) {
@@ -50,152 +28,121 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
     onSubmit({ ...formData, price: Number(formData.price), quantity: Number(formData.quantity) });
   };
 
-  const getFocusedStyle = (name) => ({
-    ...inputStyle,
-    borderColor: focused === name ? 'var(--color-primary)' : 'var(--border-primary)',
-    boxShadow: focused === name ? '0 0 0 3px var(--border-subtle)' : 'none',
-  });
-
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'var(--shadow-strong)', backdropFilter: 'blur(8px)' }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--ink)]/50 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
     >
-      <div
-        className="w-full max-w-2xl rounded-2xl overflow-hidden animate-fade-in-up"
-        style={{
-          background: 'var(--gradient-card)',
-          border: '1px solid var(--border-strong)',
-          boxShadow: '0 25px 80px var(--shadow-strong), 0 0 0 1px var(--border-subtle)',
-        }}
-      >
-      {/* Header */}
-      <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #6366f1, #7c3aed)' }}>
-            <Car className="h-4 w-4 text-white" />
-          </div>
-          <h3 className="text-base font-semibold text-[var(--text-primary)]">
-            {vehicle ? 'Edit Vehicle' : 'Add New Vehicle'}
+      <div className="w-full max-w-2xl spec-panel animate-fade-in-up">
+        {/* Header */}
+        <div className="px-6 py-4 flex items-center justify-between spec-border-b bg-[var(--paper)]">
+          <h3 className="font-display text-2xl text-[var(--ink)]">
+            {vehicle ? 'EDIT VEHICLE' : 'NEW VEHICLE ENTRY'}
           </h3>
-        </div>
-        <button
-          onClick={onCancel}
-          className="w-8 h-8 flex items-center justify-center rounded-lg transition-all hover:bg-[var(--bg-input-hover)] text-[var(--text-muted)] bg-[var(--bg-input)]"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-
-      {/* Form body */}
-      <form onSubmit={handleSubmit} className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label htmlFor="make" style={labelStyle}>Make</label>
-            <input
-              type="text"
-              id="make"
-              name="make"
-              required
-              placeholder="e.g. Toyota"
-              value={formData.make}
-              onChange={handleChange}
-              onFocus={() => setFocused('make')}
-              onBlur={() => setFocused(null)}
-              style={getFocusedStyle('make')}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="model" style={labelStyle}>Model</label>
-            <input
-              type="text"
-              id="model"
-              name="model"
-              required
-              placeholder="e.g. Camry"
-              value={formData.model}
-              onChange={handleChange}
-              onFocus={() => setFocused('model')}
-              onBlur={() => setFocused(null)}
-              style={getFocusedStyle('model')}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="category" style={labelStyle}>Category</label>
-            <select
-              id="category"
-              name="category"
-              required
-              value={formData.category}
-              onChange={handleChange}
-              onFocus={() => setFocused('category')}
-              onBlur={() => setFocused(null)}
-              style={{ ...getFocusedStyle('category'), appearance: 'none' }}
-            >
-              {['Sedan', 'SUV', 'Truck', 'Coupe', 'Hatchback', 'Sports', 'Van'].map((cat) => (
-                <option key={cat} value={cat} style={{ background: 'var(--bg-page-secondary)', color: 'var(--text-primary)' }}>{cat}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="price" style={labelStyle}>Price (₹)</label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              className='no-spinner'
-              min="0"
-              required
-              placeholder="e.g. 2000000"
-              value={formData.price}
-              onChange={handleChange}
-              onFocus={() => setFocused('price')}
-              onBlur={() => setFocused(null)}
-              style={getFocusedStyle('price')}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="quantity" style={labelStyle}>Quantity in Stock</label>
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              className='no-spinner'
-              min="0"
-              required
-              placeholder="e.g. 5"
-              value={formData.quantity}
-              onChange={handleChange}
-              onFocus={() => setFocused('quantity')}
-              onBlur={() => setFocused(null)}
-              style={getFocusedStyle('quantity')}
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-end gap-3">
           <button
-            type="button"
             onClick={onCancel}
-            className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-[var(--bg-input)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:bg-[var(--bg-input-hover)]"
+            className="text-[var(--text-muted)] hover:text-[var(--ink)] font-mono text-sm px-2"
           >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="btn-primary px-6 py-2.5 flex items-center gap-2 text-sm"
-          >
-            <Save className="h-4 w-4" />
-            {vehicle ? 'Update Vehicle' : 'Save Vehicle'}
+            [X]
           </button>
         </div>
-      </form>
-    </div>
+
+        {/* Form body */}
+        <form onSubmit={handleSubmit} className="p-6 bg-[var(--panel)]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+            <div>
+              <label htmlFor="make" className="block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase">Make</label>
+              <input
+                type="text"
+                id="make"
+                name="make"
+                required
+                placeholder="e.g. TOYOTA"
+                value={formData.make}
+                onChange={handleChange}
+                className="input-theme w-full p-2.5 font-mono text-sm"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="model" className="block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase">Model</label>
+              <input
+                type="text"
+                id="model"
+                name="model"
+                required
+                placeholder="e.g. CAMRY"
+                value={formData.model}
+                onChange={handleChange}
+                className="input-theme w-full p-2.5 font-mono text-sm"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="category" className="block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase">Category</label>
+              <select
+                id="category"
+                name="category"
+                required
+                value={formData.category}
+                onChange={handleChange}
+                className="input-theme w-full p-2.5 font-mono text-sm"
+                style={{ appearance: 'none' }}
+              >
+                {['Sedan', 'SUV', 'Truck', 'Coupe', 'Hatchback', 'Sports', 'Van'].map((cat) => (
+                  <option key={cat} value={cat}>{cat.toUpperCase()}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="price" className="block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase">Price (INR)</label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                className="input-theme w-full p-2.5 no-spinner font-mono text-sm"
+                min="0"
+                required
+                placeholder="e.g. 2000000"
+                value={formData.price}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="quantity" className="block font-mono text-xs text-[var(--text-secondary)] mb-1.5 uppercase">Initial Qty</label>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                className="input-theme w-full p-2.5 no-spinner font-mono text-sm"
+                min="0"
+                required
+                placeholder="e.g. 5"
+                value={formData.quantity}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 spec-border-t">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="btn-outline px-6 py-2.5 text-xs"
+            >
+              CANCEL
+            </button>
+            <button
+              type="submit"
+              className="btn-signal px-6 py-2.5 text-xs"
+            >
+              {vehicle ? 'UPDATE ENTRY' : 'SUBMIT ENTRY'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>,
     document.body
   );
