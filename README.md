@@ -7,7 +7,7 @@ A full-stack car dealership inventory management application built as a take-hom
 This is a monorepo containing both the backend and frontend components.
 
 ```
-project-root/
+car-dealership-inventory-system/
 ├── backend/     # Express.js REST API
 ├── frontend/    # React SPA (Vite + Tailwind)
 └── README.md    # Top-level documentation
@@ -46,7 +46,7 @@ You will need two terminal windows to run the full stack application.
 
 - **Boilerplate & Scaffolding**: I used the AI to generate the initial Vite React frontend and Express backend boilerplate.
 - **Test-Driven Development (TDD)**: The AI was prompted to strictly follow a Red-Green-Refactor cycle. It wrote the failing tests first using Vitest and Jest, and then implemented the business logic in the backend controllers/services and frontend components to make them pass.
-- **UI & Aesthetics**: I asked the AI to ensure the application used a beautiful, responsive, modern design using Tailwind CSS v4 and Lucide React icons.
+- **UI & Aesthetics**: I asked the AI to ensure the application used a beautiful, responsive, modern design. Initially styled as a glossy, rounded UI, it was later completely refactored into a custom "Dealer Spec Sheet" aesthetic. This included stark layouts, monospace technical typography (Bebas Neue & IBM Plex Mono), a scroll-locked sidebar architecture, and a togglable Dark/Light mode using CSS variables.
 - **Documentation**: The AI generated this README file, the `PROMPTS.md` chat log, and a detailed walkthrough of the final implementation.
 
 **Reflection**:
@@ -59,9 +59,9 @@ The project maintains high test coverage across both the backend and frontend.
 ### Backend Tests
 
 ```
-Test Suites: 6 passed, 6 total
-Tests:       31 passed, 31 total
-Coverage:    95.13% Lines
+Test Suites: 7 passed, 7 total
+Tests:       32 passed, 32 total
+Coverage:    95%+ Lines
 ```
 
 ### Frontend Tests
