@@ -33,6 +33,30 @@
   --border-strong: var(--ink);
 }
 
+.dark {
+  --paper: #1B1B18;
+  --ink: #F4F2EC;
+  --line: #333333;
+  --signal: #E8653F;
+  --in-stock: #439E76;
+  --out-of-stock: #D65A4B;
+  --panel: #222220;
+
+  --bg-page: var(--paper);
+  --bg-surface: var(--panel);
+  --bg-card: var(--panel);
+  --bg-input: var(--panel);
+  --bg-input-hover: #2D2D2A;
+  
+  --text-primary: var(--ink);
+  --text-secondary: #D8D3C7;
+  --text-muted: #9E9C96;
+  
+  --border-subtle: var(--line);
+  --border-primary: var(--line);
+  --border-strong: var(--ink);
+}
+
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;

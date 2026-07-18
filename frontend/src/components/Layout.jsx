@@ -1,10 +1,12 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Car, LogOut, User, Shield } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import { Car, LogOut, User, Shield, Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
 
 const Layout = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -24,6 +26,15 @@ const Layout = () => {
 
             {/* Nav Right */}
             <div className="flex items-center gap-4">
+              {/* Theme toggle */}
+              <button
+                onClick={toggleTheme}
+                className="w-8 h-8 flex items-center justify-center border spec-border bg-[var(--panel)] text-[var(--ink)] hover:bg-[var(--bg-input-hover)] transition-colors"
+                title="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
+
               {user && (
                 <>
                   {/* User info chip */}
