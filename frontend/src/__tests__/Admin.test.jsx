@@ -43,16 +43,22 @@ describe('Admin Controls', () => {
       expect(screen.getByRole('button', { name: /restock/i })).toBeInTheDocument();
     });
 
-    it('calls delete API when delete is clicked', async () => {
+    it('calls delete API when delete is clicked and confirmed in modal', async () => {
       vi.spyOn(AuthContextModule, 'useAuth').mockReturnValue({ user: { role: 'admin' } });
       const mockOnUpdate = vi.fn();
       axios.delete.mockResolvedValueOnce({ data: {} });
-      vi.spyOn(window, 'confirm').mockReturnValue(true);
       
       render(<VehicleCard vehicle={mockVehicle} onUpdate={mockOnUpdate} />);
       const user = userEvent.setup();
       
-      await user.click(screen.getByRole('button', { name: /delete/i }));
+      // Click the delete button on the card
+      await user.click(screen.getByRole('button', { name: /^delete$/i }));
+      
+      // The modal should now be visible
+      expect(screen.getByText(/delete vehicle/i)).toBeInTheDocument();
+
+      // Click the confirm button in the modal
+      await user.click(screen.getByRole('button', { name: /confirm delete/i }));
       
       expect(axios.delete).toHaveBeenCalledWith('/api/vehicles/123');
       await waitFor(() => {

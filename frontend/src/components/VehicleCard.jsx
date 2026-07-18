@@ -5,6 +5,76 @@ import { IndianRupee, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
+/* ─── Delete Modal ─────────────────────────────────────────── */
+const DeleteModal = ({ vehicle, onConfirm, onClose }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    try {
+      await onConfirm();
+    } catch (err) {
+      toast.error(err.response?.data?.error?.message || 'Delete failed');
+      setLoading(false);
+    }
+  };
+
+  return createPortal(
+    /* Backdrop */
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--ink)]/50 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      {/* Panel */}
+      <div className="w-full max-w-sm spec-panel animate-fade-in-up">
+        {/* Header */}
+        <div className="p-4 spec-border-b flex justify-between items-start bg-[var(--paper)]">
+          <div>
+            <h3 className="font-display text-xl text-[var(--out-of-stock)]">DELETE VEHICLE</h3>
+            <p className="font-mono text-xs text-[var(--text-secondary)] mt-1">
+              ID: {vehicle._id.slice(-6).toUpperCase()} | {vehicle.make.toUpperCase()} {vehicle.model.toUpperCase()}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-[var(--text-muted)] hover:text-[var(--ink)] font-mono text-sm px-2"
+          >
+            [X]
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-5 bg-[var(--panel)]">
+          <p className="font-mono text-sm text-[var(--ink)] mb-2">
+            Are you sure you want to permanently delete this vehicle?
+          </p>
+          <p className="font-mono text-xs font-bold text-[var(--out-of-stock)]">
+            THIS ACTION CANNOT BE UNDONE.
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="flex gap-3 p-4 spec-border-t bg-[var(--paper)]">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2 text-xs btn-outline"
+          >
+            CANCEL
+          </button>
+          <button
+            onClick={handleConfirm}
+            disabled={loading}
+            className="flex-1 py-2 text-xs btn-outline border-[var(--out-of-stock)] text-[var(--out-of-stock)] hover:bg-[var(--out-of-stock)] hover:text-white flex items-center justify-center"
+          >
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'CONFIRM DELETE'}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+};
+
 /* ─── Restock Modal ─────────────────────────────────────────── */
 const RestockModal = ({ vehicle, onConfirm, onClose }) => {
   const [qty, setQty] = useState(1);
@@ -118,6 +188,7 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
   const [loading, setLoading] = useState(false);
   const [purchased, setPurchased] = useState(false);
   const [showRestockModal, setShowRestockModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
 
@@ -140,16 +211,14 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
     }
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm(`Delete ${vehicle.make} ${vehicle.model}?`)) return;
-    setLoading(true);
+  const handleDeleteConfirm = async () => {
     try {
       await axios.delete(`/api/vehicles/${vehicle._id}`);
       toast.success('Vehicle deleted successfully');
+      setShowDeleteModal(false);
       if (onUpdate) onUpdate();
     } catch (err) {
       toast.error(err.response?.data?.error?.message || 'Delete failed');
-      setLoading(false);
     }
   };
 
@@ -167,6 +236,13 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
           vehicle={vehicle}
           onConfirm={handleRestockConfirm}
           onClose={() => setShowRestockModal(false)}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          vehicle={vehicle}
+          onConfirm={handleDeleteConfirm}
+          onClose={() => setShowDeleteModal(false)}
         />
       )}
 
@@ -259,7 +335,7 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
                 RESTOCK
               </button>
               <button
-                onClick={handleDelete}
+                onClick={() => setShowDeleteModal(true)}
                 disabled={loading}
                 className="btn-outline border-[var(--out-of-stock)] text-[var(--out-of-stock)] hover:bg-[var(--out-of-stock)] hover:text-white py-1.5 text-xs"
               >
