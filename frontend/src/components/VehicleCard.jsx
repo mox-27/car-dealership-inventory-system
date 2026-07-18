@@ -37,20 +37,20 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
     /* Backdrop */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+      style={{ background: 'var(--shadow-strong)', backdropFilter: 'blur(8px)' }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       {/* Panel */}
       <div
         className="w-full max-w-sm rounded-2xl overflow-hidden animate-fade-in-up"
         style={{
-          background: 'linear-gradient(145deg, rgba(21,21,31,0.97) 0%, rgba(15,15,26,0.99) 100%)',
-          border: '1px solid rgba(99,102,241,0.3)',
-          boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1)',
+          background: 'var(--gradient-card)',
+          border: '1px solid var(--border-strong)',
+          boxShadow: '0 25px 80px var(--shadow-strong), 0 0 0 1px var(--border-subtle)',
         }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-5" style={{ borderBottom: '1px solid rgba(99,102,241,0.12)' }}>
+        <div className="flex items-start justify-between p-5" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -59,16 +59,15 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
               <RotateCcw className="h-4 w-4" style={{ color: '#34d399' }} />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-white leading-tight">Restock Vehicle</h3>
-              <p className="text-xs mt-0.5" style={{ color: '#64748b' }}>
+              <h3 className="text-sm font-semibold text-[var(--text-primary)] leading-tight">Restock Vehicle</h3>
+              <p className="text-xs mt-0.5 text-[var(--text-muted)]">
                 {vehicle.make} {vehicle.model}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-lg transition-all"
-            style={{ background: 'rgba(255,255,255,0.05)', color: '#64748b' }}
+            className="w-7 h-7 flex items-center justify-center rounded-lg transition-all bg-[var(--bg-input)] hover:bg-[var(--bg-input-hover)] text-[var(--text-muted)]"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -78,12 +77,11 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
         <div className="p-5 space-y-4">
           {/* Current stock info */}
           <div
-            className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+            className="flex items-center justify-between px-4 py-3 rounded-xl bg-[var(--bg-input)] border border-[var(--border-subtle)]"
           >
-            <div className="flex items-center gap-2">
-              <Package className="h-3.5 w-3.5" style={{ color: '#64748b' }} />
-              <span className="text-xs" style={{ color: '#64748b' }}>Current stock</span>
+            <div className="flex items-center gap-2 text-[var(--text-muted)]">
+              <Package className="h-3.5 w-3.5" />
+              <span className="text-xs">Current stock</span>
             </div>
             <span className="text-sm font-semibold" style={{ color: vehicle.quantity > 0 ? '#34d399' : '#f87171' }}>
               {vehicle.quantity} units
@@ -92,15 +90,14 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
 
           {/* Quantity selector */}
           <div>
-            <label className="block text-xs font-semibold mb-2" style={{ color: '#94a3b8' }}>
+            <label className="block text-xs font-semibold mb-2 text-[var(--text-secondary)]">
               Add quantity
             </label>
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 flex items-center justify-center rounded-xl flex-shrink-0 transition-all"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#94a3b8' }}
+                className="w-10 h-10 flex items-center justify-center rounded-xl flex-shrink-0 transition-all bg-[var(--bg-input)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-input-hover)]"
               >
                 <Minus className="h-4 w-4" />
               </button>
@@ -115,13 +112,7 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
                   const v = parseInt(e.target.value, 10);
                   if (!isNaN(v) && v >= 1) setQty(v);
                 }}
-                className="flex-1 min-w-0 text-center text-xl font-bold rounded-xl py-2 no-spinner"
-                style={{
-                  background: 'rgba(99,102,241,0.08)',
-                  border: '1px solid rgba(99,102,241,0.25)',
-                  color: '#e2e8f0',
-                  outline: 'none',
-                }}
+                className="flex-1 min-w-0 text-center text-xl font-bold rounded-xl py-2 no-spinner bg-[var(--bg-input)] border border-[var(--border-primary)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-primary)]"
               />
 
               <button
@@ -148,8 +139,7 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
         <div className="flex gap-3 px-5 pb-5">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all"
-            style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}
+            className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all bg-[var(--bg-input)] hover:bg-[var(--bg-input-hover)] text-[var(--text-secondary)] border border-[var(--border-subtle)]"
           >
             Cancel
           </button>
@@ -236,9 +226,9 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
       <div
         className="card-hover rounded-2xl overflow-hidden flex flex-col"
         style={{
-          background: 'linear-gradient(145deg, rgba(21,21,31,0.9) 0%, rgba(15,15,26,0.95) 100%)',
-          border: '1px solid rgba(99, 102, 241, 0.12)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+          background: 'var(--gradient-card)',
+          border: '1px solid var(--border-subtle)',
+          boxShadow: '0 4px 24px var(--shadow-color)',
         }}
       >
         {/* Color accent bar */}
@@ -248,8 +238,8 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
           {/* Header row */}
           <div className="flex justify-between items-start mb-3">
             <div className="flex-1 min-w-0">
-              <h3 className="text-base font-700 text-white truncate leading-snug">
-                {vehicle.make} <span className="text-slate-300">{vehicle.model}</span>
+              <h3 className="text-base font-700 text-[var(--text-primary)] truncate leading-snug">
+                {vehicle.make} <span className="text-[var(--text-secondary)]">{vehicle.model}</span>
               </h3>
               <span
                 className="badge mt-1.5"
@@ -272,14 +262,14 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
             {isOutOfStock ? (
               <span className="text-xs font-medium" style={{ color: '#f87171' }}>Out of stock</span>
             ) : (
-              <span className="text-xs" style={{ color: '#94a3b8' }}>
+              <span className="text-xs text-[var(--text-muted)]">
                 <span className="font-semibold" style={{ color: '#34d399' }}>{vehicle.quantity}</span> in stock
               </span>
             )}
           </div>
 
           {/* Stock bar */}
-          <div className="mb-4 h-1 w-full rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
+          <div className="mb-4 h-1 w-full rounded-full bg-[var(--bg-input-hover)]">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{
@@ -305,7 +295,7 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
               purchased
                 ? { background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', border: '1px solid rgba(16,185,129,0.3)' }
                 : isOutOfStock
-                ? { background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid rgba(255,255,255,0.06)' }
+                ? { background: 'var(--bg-input)', color: 'var(--text-muted)', border: '1px solid var(--border-subtle)' }
                 : { background: 'linear-gradient(135deg, #6366f1, #7c3aed)', color: 'white', boxShadow: '0 4px 15px rgba(99,102,241,0.3)' }
             }
           >

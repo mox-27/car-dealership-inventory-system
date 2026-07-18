@@ -8,16 +8,13 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const StatCard = ({ icon: Icon, label, value, color }) => (
-  <div
-    className="rounded-2xl p-4 flex items-center gap-4"
-    style={{ background: 'rgba(21,21,31,0.7)', border: '1px solid rgba(99,102,241,0.12)', backdropFilter: 'blur(10px)' }}
-  >
+  <div className="rounded-2xl p-4 flex items-center gap-4 glass">
     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: color + '20', border: `1px solid ${color}30` }}>
       <Icon className="h-5 w-5" style={{ color }} />
     </div>
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#64748b' }}>{label}</p>
-      <p className="text-xl font-700 text-white">{value}</p>
+      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{label}</p>
+      <p className="text-xl font-700 text-[var(--text-primary)]">{value}</p>
     </div>
   </div>
 );
@@ -85,11 +82,11 @@ const Dashboard = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]" data-testid="loading-spinner">
         <div className="relative">
-          <div className="w-16 h-16 rounded-full" style={{ border: '2px solid rgba(99,102,241,0.1)' }} />
-          <div className="absolute inset-0 w-16 h-16 rounded-full animate-spin" style={{ border: '2px solid transparent', borderTopColor: '#6366f1' }} />
-          <Car className="absolute inset-0 m-auto h-6 w-6 animate-pulse" style={{ color: '#6366f1' }} />
+          <div className="w-16 h-16 rounded-full" style={{ border: '2px solid var(--border-subtle)' }} />
+          <div className="absolute inset-0 w-16 h-16 rounded-full animate-spin" style={{ border: '2px solid transparent', borderTopColor: 'var(--color-primary)' }} />
+          <Car className="absolute inset-0 m-auto h-6 w-6 animate-pulse text-[var(--color-primary)]" />
         </div>
-        <p className="mt-5 text-sm font-medium" style={{ color: '#64748b' }}>Loading inventory...</p>
+        <p className="mt-5 text-sm font-medium text-[var(--text-muted)]">Loading inventory...</p>
       </div>
     );
   }
@@ -99,13 +96,13 @@ const Dashboard = () => {
       {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#6366f1' }}>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-1 text-[var(--color-primary)]">
             AutoVerse Dealership
           </p>
-          <h1 className="text-3xl font-display font-800 text-white">
+          <h1 className="text-3xl font-display font-800 text-[var(--text-primary)]">
             Vehicle <span className="gradient-text">Inventory</span>
           </h1>
-          <p className="mt-1 text-sm" style={{ color: '#64748b' }}>
+          <p className="mt-1 text-sm text-[var(--text-muted)]">
             Browse and purchase from our premium collection
           </p>
         </div>
@@ -147,16 +144,16 @@ const Dashboard = () => {
       {/* Vehicle grid */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="h-8 w-8 animate-spin" style={{ color: '#6366f1' }} />
+          <Loader2 className="h-8 w-8 animate-spin text-[var(--color-primary)]" />
         </div>
       ) : vehicles.length === 0 ? (
         <div
-          className="text-center py-20 rounded-2xl"
-          style={{ background: 'rgba(21,21,31,0.6)', border: '1px dashed rgba(99,102,241,0.2)' }}
+          className="text-center py-20 rounded-2xl glass"
+          style={{ borderStyle: 'dashed' }}
         >
-          <Car className="h-10 w-10 mx-auto mb-3 opacity-30" style={{ color: '#6366f1' }} />
-          <p className="text-base font-medium" style={{ color: '#64748b' }}>No vehicles found</p>
-          <p className="text-sm mt-1" style={{ color: '#475569' }}>Try adjusting your filters</p>
+          <Car className="h-10 w-10 mx-auto mb-3 opacity-30 text-[var(--color-primary)]" />
+          <p className="text-base font-medium text-[var(--text-muted)]">No vehicles found</p>
+          <p className="text-sm mt-1 text-[var(--text-secondary)]">Try adjusting your filters</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

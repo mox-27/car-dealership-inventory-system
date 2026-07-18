@@ -3,9 +3,9 @@ import { createPortal } from 'react-dom';
 import { X, Save, Car } from 'lucide-react';
 
 const inputStyle = {
-  background: 'rgba(255,255,255,0.05)',
-  border: '1px solid rgba(99,102,241,0.2)',
-  color: '#e2e8f0',
+  background: 'var(--bg-input)',
+  border: '1px solid var(--border-primary)',
+  color: 'var(--text-primary)',
   borderRadius: '0.75rem',
   padding: '0.625rem 0.875rem',
   fontSize: '0.875rem',
@@ -18,7 +18,7 @@ const labelStyle = {
   display: 'block',
   fontSize: '0.75rem',
   fontWeight: '600',
-  color: '#94a3b8',
+  color: 'var(--text-secondary)',
   marginBottom: '0.375rem',
 };
 
@@ -52,38 +52,37 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
 
   const getFocusedStyle = (name) => ({
     ...inputStyle,
-    borderColor: focused === name ? '#6366f1' : 'rgba(99,102,241,0.2)',
-    boxShadow: focused === name ? '0 0 0 3px rgba(99,102,241,0.12)' : 'none',
+    borderColor: focused === name ? 'var(--color-primary)' : 'var(--border-primary)',
+    boxShadow: focused === name ? '0 0 0 3px var(--border-subtle)' : 'none',
   });
 
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+      style={{ background: 'var(--shadow-strong)', backdropFilter: 'blur(8px)' }}
       onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
     >
       <div
         className="w-full max-w-2xl rounded-2xl overflow-hidden animate-fade-in-up"
         style={{
-          background: 'linear-gradient(145deg, rgba(21,21,31,0.97) 0%, rgba(15,15,26,0.99) 100%)',
-          border: '1px solid rgba(99,102,241,0.3)',
-          boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1)',
+          background: 'var(--gradient-card)',
+          border: '1px solid var(--border-strong)',
+          boxShadow: '0 25px 80px var(--shadow-strong), 0 0 0 1px var(--border-subtle)',
         }}
       >
       {/* Header */}
-      <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(99,102,241,0.12)' }}>
+      <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #6366f1, #7c3aed)' }}>
             <Car className="h-4 w-4 text-white" />
           </div>
-          <h3 className="text-base font-semibold text-white">
+          <h3 className="text-base font-semibold text-[var(--text-primary)]">
             {vehicle ? 'Edit Vehicle' : 'Add New Vehicle'}
           </h3>
         </div>
         <button
           onClick={onCancel}
-          className="w-8 h-8 flex items-center justify-center rounded-lg transition-all"
-          style={{ background: 'rgba(255,255,255,0.05)', color: '#64748b' }}
+          className="w-8 h-8 flex items-center justify-center rounded-lg transition-all hover:bg-[var(--bg-input-hover)] text-[var(--text-muted)] bg-[var(--bg-input)]"
         >
           <X className="h-4 w-4" />
         </button>
@@ -137,7 +136,7 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
               style={{ ...getFocusedStyle('category'), appearance: 'none' }}
             >
               {['Sedan', 'SUV', 'Truck', 'Coupe', 'Hatchback', 'Sports', 'Van'].map((cat) => (
-                <option key={cat} value={cat} style={{ background: '#1c1c2e' }}>{cat}</option>
+                <option key={cat} value={cat} style={{ background: 'var(--bg-page-secondary)', color: 'var(--text-primary)' }}>{cat}</option>
               ))}
             </select>
           </div>
@@ -183,8 +182,7 @@ const VehicleForm = ({ vehicle = null, onSubmit, onCancel }) => {
           <button
             type="button"
             onClick={onCancel}
-            className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all"
-            style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}
+            className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all bg-[var(--bg-input)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:bg-[var(--bg-input-hover)]"
           >
             Cancel
           </button>

@@ -29,7 +29,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a14 0%, #0d0d1f 100%)' }}>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: 'var(--gradient-page)' }}>
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #7c3aed 0%, transparent 70%)', filter: 'blur(40px)' }} />
@@ -44,15 +44,15 @@ const Register = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 glow" style={{ background: 'linear-gradient(135deg, #7c3aed, #6366f1)' }}>
             <Car className="h-8 w-8 text-white animate-float" />
           </div>
-          <h1 className="font-display text-3xl font-800 text-white">Join AutoVerse</h1>
-          <p className="mt-2 text-slate-400 text-sm">Create your account in seconds</p>
+          <h1 className="font-display text-3xl font-800 text-[var(--text-primary)]">Join AutoVerse</h1>
+          <p className="mt-2 text-[var(--text-secondary)] text-sm">Create your account in seconds</p>
         </div>
 
         {/* Card */}
         <div className="glass-strong rounded-2xl p-8">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Full Name
               </label>
               <div className="relative">
@@ -71,7 +71,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Email address
               </label>
               <div className="relative">
@@ -90,7 +90,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Password
               </label>
               <div className="relative">
@@ -124,7 +124,7 @@ const Register = () => {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-[var(--text-muted)]">
             Already have an account?{' '}
             <Link to="/login" className="text-primary font-medium hover:text-primary-light transition-colors">
               Sign in

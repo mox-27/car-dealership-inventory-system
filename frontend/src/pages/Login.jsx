@@ -27,7 +27,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a14 0%, #0d0d1f 100%)' }}>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: 'var(--gradient-page)' }}>
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)', filter: 'blur(40px)' }} />
@@ -41,15 +41,15 @@ const Login = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 glow" style={{ background: 'linear-gradient(135deg, #6366f1, #7c3aed)' }}>
             <Car className="h-8 w-8 text-white animate-float" />
           </div>
-          <h1 className="font-display text-3xl font-800 text-white">Welcome back</h1>
-          <p className="mt-2 text-slate-400 text-sm">Sign in to your AutoVerse account</p>
+          <h1 className="font-display text-3xl font-800 text-[var(--text-primary)]">Welcome back</h1>
+          <p className="mt-2 text-[var(--text-secondary)] text-sm">Sign in to your AutoVerse account</p>
         </div>
 
         {/* Card */}
         <div className="glass-strong rounded-2xl p-8">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Email address
               </label>
               <div className="relative">
@@ -68,7 +68,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 Password
               </label>
               <div className="relative">
@@ -102,7 +102,7 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-[var(--text-muted)]">
             Don't have an account?{' '}
             <Link to="/register" className="text-primary font-medium hover:text-primary-light transition-colors">
               Create one free
