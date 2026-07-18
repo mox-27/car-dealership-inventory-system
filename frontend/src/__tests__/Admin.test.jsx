@@ -60,7 +60,7 @@ describe('Admin Controls', () => {
       });
     });
 
-    it('calls restock API when restock is clicked', async () => {
+    it('calls restock API when restock is clicked and confirmed in modal', async () => {
       vi.spyOn(AuthContextModule, 'useAuth').mockReturnValue({ user: { role: 'admin' } });
       const mockOnUpdate = vi.fn();
       axios.post.mockResolvedValueOnce({ data: {} });
@@ -68,13 +68,20 @@ describe('Admin Controls', () => {
       render(<VehicleCard vehicle={mockVehicle} onUpdate={mockOnUpdate} />);
       const user = userEvent.setup();
       
-      // Assume restock prompts or just sends a default quantity, or we have a prompt mock.
-      // We will implement restock by calling prompt(). Let's mock window.prompt
-      vi.spyOn(window, 'prompt').mockReturnValue('5');
-      
+      // Open the restock modal
       await user.click(screen.getByRole('button', { name: /restock/i }));
       
-      expect(window.prompt).toHaveBeenCalled();
+      // The modal should now be visible
+      expect(screen.getByText('Restock Vehicle')).toBeInTheDocument();
+      
+      // Select all and type a new value so it replaces the default '1'
+      const qtyInput = screen.getByRole('spinbutton');
+      await user.tripleClick(qtyInput);
+      await user.keyboard('5');
+      
+      // Click the confirm button
+      await user.click(screen.getByRole('button', { name: /restock 5 unit/i }));
+      
       expect(axios.post).toHaveBeenCalledWith('/api/vehicles/123/restock', { quantity: 5 });
       await waitFor(() => {
         expect(mockOnUpdate).toHaveBeenCalled();
