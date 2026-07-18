@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import VehicleCard from '../components/VehicleCard';
 import axios from 'axios';
+import * as AuthContextModule from '../context/AuthContext';
 
 vi.mock('axios');
 
@@ -20,6 +21,7 @@ describe('VehicleCard Purchase Flow', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(AuthContextModule, 'useAuth').mockReturnValue({ token: 'fake-token' });
   });
 
   it('renders a Purchase button when in stock', () => {
@@ -31,7 +33,7 @@ describe('VehicleCard Purchase Flow', () => {
 
   it('renders a disabled Purchase button when out of stock', () => {
     render(<VehicleCard vehicle={{ ...mockVehicle, quantity: 0 }} onUpdate={mockOnUpdate} />);
-    const button = screen.getByRole('button', { name: /purchase/i });
+    const button = screen.getByRole('button', { name: /out of stock/i });
     expect(button).toBeInTheDocument();
     expect(button).toBeDisabled();
   });

@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentFilters, setCurrentFilters] = useState({});
 
   const fetchVehicles = useCallback(async (filters = {}) => {
     setLoading(true);
@@ -30,11 +31,15 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    fetchVehicles();
-  }, [fetchVehicles]);
+    fetchVehicles(currentFilters);
+  }, [fetchVehicles, currentFilters]);
 
   const handleSearch = (filters) => {
-    fetchVehicles(filters);
+    setCurrentFilters(filters);
+  };
+
+  const handleUpdate = () => {
+    fetchVehicles(currentFilters);
   };
 
   if (loading) {
@@ -79,7 +84,7 @@ const Dashboard = () => {
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {vehicles.map((vehicle) => (
-            <VehicleCard key={vehicle._id} vehicle={vehicle} />
+            <VehicleCard key={vehicle._id} vehicle={vehicle} onUpdate={handleUpdate} />
           ))}
         </div>
       )}
