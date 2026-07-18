@@ -3,25 +3,24 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LogIn, Mail, Lock, ArrowRight, Car } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       const response = await axios.post('/api/auth/login', { email, password });
       login(response.data.token);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Login failed. Please check your credentials.');
+      toast.error(err.response?.data?.error?.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -48,13 +47,6 @@ const Login = () => {
 
         {/* Card */}
         <div className="glass-strong rounded-2xl p-8">
-          {error && (
-            <div className="mb-6 px-4 py-3 rounded-xl text-sm text-red-300 flex items-start gap-2" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-              <span className="mt-0.5 text-red-400">⚠</span>
-              <span>{error}</span>
-            </div>
-          )}
-
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">

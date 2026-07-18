@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { IndianRupee, ShoppingCart, Loader2, Package, Pencil, Trash2, RotateCcw, CheckCircle, X, Plus, Minus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const categoryColors = {
   Sedan: { bg: 'rgba(99, 102, 241, 0.12)', color: '#818cf8', border: 'rgba(99,102,241,0.3)' },
@@ -18,16 +19,14 @@ const categoryColors = {
 const RestockModal = ({ vehicle, onConfirm, onClose }) => {
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const handleConfirm = async () => {
     if (qty <= 0) return;
     setLoading(true);
-    setError(null);
     try {
       await onConfirm(qty);
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Restock failed');
+      toast.error(err.response?.data?.error?.message || 'Restock failed');
       setLoading(false);
     }
   };
@@ -143,12 +142,6 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
               </span>
             </p>
           </div>
-
-          {error && (
-            <p className="text-xs px-3 py-2 rounded-lg" style={{ color: '#f87171', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
-              {error}
-            </p>
-          )}
         </div>
 
         {/* Footer */}
@@ -185,7 +178,6 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
 /* ─── Vehicle Card ──────────────────────────────────────────── */
 const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [purchased, setPurchased] = useState(false);
   const [showRestockModal, setShowRestockModal] = useState(false);
   const { user } = useAuth();
@@ -196,16 +188,16 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
 
   const handlePurchase = async () => {
     setLoading(true);
-    setError(null);
     try {
       await axios.post(`/api/vehicles/${vehicle._id}/purchase`);
+      toast.success('Vehicle purchased successfully!');
       setPurchased(true);
       setTimeout(() => {
         setPurchased(false);
         if (onUpdate) onUpdate();
       }, 1500);
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Purchase failed');
+      toast.error(err.response?.data?.error?.message || 'Purchase failed');
     } finally {
       setLoading(false);
     }
@@ -216,15 +208,17 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
     setLoading(true);
     try {
       await axios.delete(`/api/vehicles/${vehicle._id}`);
+      toast.success('Vehicle deleted successfully');
       if (onUpdate) onUpdate();
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Delete failed');
+      toast.error(err.response?.data?.error?.message || 'Delete failed');
       setLoading(false);
     }
   };
 
   const handleRestockConfirm = async (qty) => {
     await axios.post(`/api/vehicles/${vehicle._id}/restock`, { quantity: qty });
+    toast.success(`Restocked ${qty} units`);
     setShowRestockModal(false);
     if (onUpdate) onUpdate();
   };
@@ -298,12 +292,6 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
               }}
             />
           </div>
-
-          {error && (
-            <p className="text-xs mb-3 px-3 py-2 rounded-lg" style={{ color: '#f87171', background: 'rgba(239,68,68,0.1)' }}>
-              {error}
-            </p>
-          )}
 
           {/* Spacer */}
           <div className="flex-1" />

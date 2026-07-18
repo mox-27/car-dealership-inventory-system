@@ -4,8 +4,15 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Dashboard from '../pages/Dashboard';
 import { AuthProvider } from '../context/AuthContext';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 vi.mock('axios');
+vi.mock('react-hot-toast', () => ({
+  default: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
 
 const mockVehicles = [
   { _id: '1', make: 'Toyota', model: 'Camry', category: 'Sedan', price: 25000, quantity: 5 },
@@ -51,12 +58,12 @@ describe('Dashboard Component', () => {
     expect(screen.getAllByText(/out of stock/i).length).toBeGreaterThan(0);
   });
 
-  it('renders error state on API failure', async () => {
+  it('calls toast.error on API failure', async () => {
     axios.get.mockRejectedValueOnce(new Error('Failed to fetch'));
     renderDashboard();
 
     await waitFor(() => {
-      expect(screen.getByText(/failed to load vehicles/i)).toBeInTheDocument();
+      expect(toast.error).toHaveBeenCalledWith('Failed to load vehicles. Please try again later.');
     });
   });
 });

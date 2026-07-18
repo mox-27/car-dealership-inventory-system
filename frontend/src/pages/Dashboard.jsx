@@ -5,6 +5,7 @@ import SearchFilter from '../components/SearchFilter';
 import VehicleForm from '../components/VehicleForm';
 import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const StatCard = ({ icon: Icon, label, value, color }) => (
   <div
@@ -24,7 +25,6 @@ const StatCard = ({ icon: Icon, label, value, color }) => (
 const Dashboard = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [currentFilters, setCurrentFilters] = useState({});
 
   const { user } = useAuth();
@@ -42,9 +42,8 @@ const Dashboard = () => {
       const endpoint = params.toString() ? `/api/vehicles/search?${params.toString()}` : '/api/vehicles';
       const response = await axios.get(endpoint);
       setVehicles(response.data.vehicles);
-      setError(null);
     } catch (err) {
-      setError('Failed to load vehicles. Please try again later.');
+      toast.error('Failed to load vehicles. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -61,14 +60,16 @@ const Dashboard = () => {
     try {
       if (editingVehicle) {
         await axios.put(`/api/vehicles/${editingVehicle._id}`, formData);
+        toast.success('Vehicle updated successfully');
       } else {
         await axios.post('/api/vehicles', formData);
+        toast.success('Vehicle added successfully');
       }
       setShowForm(false);
       setEditingVehicle(null);
       handleUpdate();
     } catch (err) {
-      alert(err.response?.data?.error?.message || 'Failed to save vehicle');
+      toast.error(err.response?.data?.error?.message || 'Failed to save vehicle');
     }
   };
 
@@ -130,14 +131,6 @@ const Dashboard = () => {
           color="#f59e0b"
         />
       </div>
-
-      {/* Error */}
-      {error && (
-        <div className="flex items-start gap-3 px-4 py-3 rounded-xl text-sm" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}>
-          <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-          <span>{error}</span>
-        </div>
-      )}
 
       {/* Vehicle Form */}
       {showForm && (

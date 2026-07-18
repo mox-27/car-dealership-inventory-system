@@ -6,9 +6,16 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import { AuthProvider } from '../context/AuthContext';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 // Mock axios
 vi.mock('axios');
+vi.mock('react-hot-toast', () => ({
+  default: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
 
 const renderWithRouterAndAuth = (ui) => {
   return render(
@@ -48,7 +55,7 @@ describe('Auth Flow', () => {
       await user.click(screen.getByRole('button', { name: /sign in/i }));
 
       await waitFor(() => {
-        expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
+        expect(toast.error).toHaveBeenCalledWith('Invalid credentials');
       });
     });
   });
@@ -77,7 +84,7 @@ describe('Auth Flow', () => {
       await user.click(screen.getByRole('button', { name: /create account/i }));
 
       await waitFor(() => {
-        expect(screen.getByText(/email already exists/i)).toBeInTheDocument();
+        expect(toast.error).toHaveBeenCalledWith('Email already exists');
       });
     });
   });

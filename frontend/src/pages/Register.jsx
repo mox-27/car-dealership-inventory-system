@@ -3,19 +3,18 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { UserPlus, Mail, Lock, User, ArrowRight, Car } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     setLoading(true);
     try {
       await axios.post('/api/auth/register', { name, email, password });
@@ -23,7 +22,7 @@ const Register = () => {
       login(loginResponse.data.token);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Registration failed');
+      toast.error(err.response?.data?.error?.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -51,13 +50,6 @@ const Register = () => {
 
         {/* Card */}
         <div className="glass-strong rounded-2xl p-8">
-          {error && (
-            <div className="mb-6 px-4 py-3 rounded-xl text-sm text-red-300 flex items-start gap-2" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-              <span className="mt-0.5 text-red-400">⚠</span>
-              <span>{error}</span>
-            </div>
-          )}
-
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
