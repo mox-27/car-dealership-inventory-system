@@ -90,3 +90,56 @@ export const deleteVehicle = async (id) => {
 
   return vehicle;
 };
+
+/**
+ * Purchases a vehicle (decrements quantity by 1).
+ * @param {string} id - Vehicle ID
+ * @returns {Promise<Object>} The updated vehicle
+ * @throws {Error} If vehicle is not found or out of stock
+ */
+export const purchaseVehicle = async (id) => {
+  const vehicle = await Vehicle.findById(id);
+  
+  if (!vehicle) {
+    const error = new Error('Vehicle not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (vehicle.quantity <= 0) {
+    const error = new Error('Vehicle is out of stock');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  vehicle.quantity -= 1;
+  await vehicle.save();
+  return vehicle;
+};
+
+/**
+ * Restocks a vehicle (increments quantity).
+ * @param {string} id - Vehicle ID
+ * @param {number} amount - Quantity to add
+ * @returns {Promise<Object>} The updated vehicle
+ * @throws {Error} If vehicle is not found or amount is invalid
+ */
+export const restockVehicle = async (id, amount) => {
+  if (amount == null || amount <= 0) {
+    const error = new Error('Invalid restock quantity');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const vehicle = await Vehicle.findById(id);
+  
+  if (!vehicle) {
+    const error = new Error('Vehicle not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  vehicle.quantity += amount;
+  await vehicle.save();
+  return vehicle;
+};

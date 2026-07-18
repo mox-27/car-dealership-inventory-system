@@ -4,6 +4,8 @@ import {
   updateVehicle,
   deleteVehicle,
   searchVehicles,
+  purchaseVehicle,
+  restockVehicle,
 } from '../services/vehicleService.js';
 
 /**
@@ -45,4 +47,20 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   await deleteVehicle(req.params.id);
   res.status(200).json({ message: 'Vehicle deleted successfully' });
+};
+
+/**
+ * Handles POST /api/vehicles/:id/purchase — decrement vehicle quantity.
+ */
+export const purchase = async (req, res) => {
+  const vehicle = await purchaseVehicle(req.params.id);
+  res.status(200).json({ vehicle });
+};
+
+/**
+ * Handles POST /api/vehicles/:id/restock — increment vehicle quantity (admin only).
+ */
+export const restock = async (req, res) => {
+  const vehicle = await restockVehicle(req.params.id, req.body.quantity);
+  res.status(200).json({ vehicle });
 };
