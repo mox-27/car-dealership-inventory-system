@@ -22,4 +22,25 @@ describe('POST /api/auth/register', () => {
     expect(res.body.user).toHaveProperty('role', 'user');
     expect(res.body.user).not.toHaveProperty('password');
   });
+
+  it('should return 409 when registering with a duplicate email', async () => {
+    const userData = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: 'password123',
+      role: 'user',
+    };
+
+    // Register first time
+    await request(app).post('/api/auth/register').send(userData);
+
+    // Register again with same email
+    const res = await request(app).post('/api/auth/register').send({
+      ...userData,
+      name: 'Jane Doe',
+    });
+
+    expect(res.statusCode).toBe(409);
+    expect(res.body).toHaveProperty('error');
+  });
 });
