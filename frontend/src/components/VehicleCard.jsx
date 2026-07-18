@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Car, Package, DollarSign, ShoppingCart, Loader2 } from 'lucide-react';
+import { Car, Package, IndianRupee, ShoppingCart, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
@@ -66,8 +66,8 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
             </span>
           </div>
           <div className="flex items-center text-primary font-bold">
-            <DollarSign className="h-4 w-4" />
-            <span>{vehicle.price.toLocaleString()}</span>
+            <IndianRupee className="h-4 w-4" />
+            <span>{vehicle.price.toLocaleString('en-IN')}</span>
           </div>
         </div>
 

@@ -32,11 +32,11 @@ const seed = async () => {
     const count = await Vehicle.countDocuments();
     if (count === 0) {
       const vehicles = [
-        { make: 'Toyota', model: 'Camry', category: 'Sedan', price: 25000, quantity: 5 },
-        { make: 'Honda', model: 'CR-V', category: 'SUV', price: 32000, quantity: 3 },
-        { make: 'Ford', model: 'Mustang', category: 'Sports', price: 45000, quantity: 2 },
-        { make: 'Tesla', model: 'Model 3', category: 'Sedan', price: 40000, quantity: 4 },
-        { make: 'Chevrolet', model: 'Silverado', category: 'Truck', price: 50000, quantity: 1 }
+        { make: 'Toyota', model: 'Camry', category: 'Sedan', price: 4600000, quantity: 5 },
+        { make: 'Honda', model: 'CR-V', category: 'SUV', price: 3500000, quantity: 3 },
+        { make: 'Ford', model: 'Mustang', category: 'Sports', price: 7500000, quantity: 2 },
+        { make: 'Tesla', model: 'Model 3', category: 'Sedan', price: 6000000, quantity: 4 },
+        { make: 'Mahindra', model: 'Scorpio', category: 'SUV', price: 1800000, quantity: 6 }
       ];
 
       await Vehicle.insertMany(vehicles);
