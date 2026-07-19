@@ -8,9 +8,9 @@ import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package, LayoutGrid, List,
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
-const StatItem = ({ label, value }) => (
+const StatItem = ({ label, value, colorClass = "text-[var(--ink)]" }) => (
   <div className="p-4 flex flex-col justify-center items-center text-center">
-    <p className="text-3xl font-mono text-[var(--ink)] tracking-tight">{value}</p>
+    <p className={`text-3xl font-mono tracking-tight ${colorClass}`}>{value}</p>
     <p className="text-xs font-mono uppercase tracking-widest text-[var(--text-muted)] mt-1">{label}</p>
   </div>
 );
@@ -98,6 +98,7 @@ const Dashboard = () => {
 
   const totalVehicles = vehicles.length;
   const inStock = vehicles.filter((v) => v.quantity > 0).length;
+  const lowStock = vehicles.filter((v) => v.quantity > 0 && v.quantity <= 2).length;
 
   if (loading && vehicles.length === 0) {
     return (
@@ -143,7 +144,8 @@ const Dashboard = () => {
       <div className="flex-shrink-0 spec-panel flex flex-row justify-between w-full divide-x divide-[var(--line)]">
         <div className="flex-1"><StatItem label="Total Models" value={totalVehicles} /></div>
         <div className="flex-1"><StatItem label="In Stock" value={inStock} /></div>
-        <div className="flex-1"><StatItem label="Out of Stock" value={totalVehicles - inStock} /></div>
+        <div className="flex-1"><StatItem label="Low Stock" value={lowStock} colorClass="text-[var(--signal)]" /></div>
+        <div className="flex-1"><StatItem label="Out of Stock" value={totalVehicles - inStock} colorClass="text-[var(--out-of-stock)]" /></div>
       </div>
 
       {/* Vehicle Form */}

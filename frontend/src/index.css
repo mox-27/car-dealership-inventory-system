@@ -242,6 +242,11 @@
     transform: rotate(-1deg);
   }
 
+  .stamp-low-stock {
+    color: var(--signal);
+    transform: rotate(0.5deg);
+  }
+
   .stamp-out-of-stock {
     color: var(--out-of-stock);
     transform: rotate(1.5deg);

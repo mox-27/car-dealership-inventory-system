@@ -193,6 +193,7 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit, viewMode = 'grid' }) => {
   const isAdmin = user?.role === 'admin';
 
   const isOutOfStock = vehicle.quantity <= 0;
+  const isLowStock = vehicle.quantity > 0 && vehicle.quantity <= 2;
 
   const handlePurchase = async () => {
     setLoading(true);
@@ -273,6 +274,8 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit, viewMode = 'grid' }) => {
           <div className="flex items-center gap-2 flex-shrink-0">
             {isOutOfStock ? (
               <span className="stamp-badge stamp-out-of-stock">OUT OF STOCK</span>
+            ) : isLowStock ? (
+              <span className="stamp-badge stamp-low-stock">LOW STOCK</span>
             ) : (
               <span className="stamp-badge stamp-in-stock">IN STOCK</span>
             )}
@@ -355,6 +358,8 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit, viewMode = 'grid' }) => {
           <div className="flex items-center justify-between mb-3">
             {isOutOfStock ? (
               <span className="stamp-badge stamp-out-of-stock">OUT OF STOCK</span>
+            ) : isLowStock ? (
+              <span className="stamp-badge stamp-low-stock">LOW STOCK</span>
             ) : (
               <span className="stamp-badge stamp-in-stock">IN STOCK</span>
             )}
@@ -371,7 +376,7 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit, viewMode = 'grid' }) => {
                 className="flex-1 transition-colors duration-300"
                 style={{
                   background: i < Math.min(10, vehicle.quantity)
-                    ? (isOutOfStock ? 'var(--out-of-stock)' : 'var(--in-stock)')
+                    ? (isOutOfStock ? 'var(--out-of-stock)' : isLowStock ? 'var(--signal)' : 'var(--in-stock)')
                     : 'var(--line)'
                 }}
               />
