@@ -32,6 +32,12 @@ const vehicleSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Prevent duplicate vehicles (same make + model, case-insensitive)
+vehicleSchema.index(
+  { make: 1, model: 1 },
+  { unique: true, collation: { locale: 'en', strength: 2 } }
+);
+
 const Vehicle = mongoose.model('Vehicle', vehicleSchema);
 
 export default Vehicle;

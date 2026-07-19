@@ -66,6 +66,33 @@ describe('Vehicle CRUD', () => {
 
       expect(res.statusCode).toBe(401);
     });
+
+    it('should reject duplicate vehicle (same make + model)', async () => {
+      const vehicleData = {
+        make: 'Toyota',
+        model: 'Supra',
+        category: 'Sports',
+        price: 50000,
+        quantity: 3,
+      };
+
+      // First creation should succeed
+      const first = await request(app)
+        .post('/api/vehicles')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(vehicleData);
+
+      expect(first.statusCode).toBe(201);
+
+      // Second creation with same make+model should fail
+      const second = await request(app)
+        .post('/api/vehicles')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send({ ...vehicleData, price: 55000, quantity: 5 });
+
+      expect(second.statusCode).toBe(409);
+      expect(second.body.error.message).toMatch(/already exists/i);
+    });
   });
 
   describe('GET /api/vehicles', () => {

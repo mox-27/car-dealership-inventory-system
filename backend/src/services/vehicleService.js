@@ -6,6 +6,20 @@ import Vehicle from '../models/Vehicle.js';
  * @returns {Promise<Object>} The created vehicle
  */
 export const addVehicle = async (vehicleData) => {
+  // Check for duplicate (same make + model, case-insensitive)
+  const existing = await Vehicle.findOne({
+    make: { $regex: new RegExp(`^${vehicleData.make}$`, 'i') },
+    model: { $regex: new RegExp(`^${vehicleData.model}$`, 'i') },
+  });
+
+  if (existing) {
+    const error = new Error(
+      `Vehicle '${vehicleData.make} ${vehicleData.model}' already exists`
+    );
+    error.statusCode = 409;
+    throw error;
+  }
+
   const vehicle = await Vehicle.create(vehicleData);
   return vehicle;
 };
