@@ -70,3 +70,49 @@ Coverage:    95%+ Lines
 Test Suites: 6 passed, 6 total
 Tests:       24 passed, 24 total
 ```
+
+### Screenshots
+
+- Home Page
+
+![Home Page](screenshots/home_page.png)
+
+- Home Page (Dark Mode)
+
+![Home Page (Dark Mode)](screenshots/home_darkmode.png)
+
+- Login
+
+![Login](screenshots/login.png)
+
+- Register
+
+![Register](screenshots/register.png)
+
+- Admin Dashboard
+
+![Admin Dashboard](screenshots/admin_dashboard.png)
+
+- User Dashboard
+
+![User Dashboard](screenshots/user_dashboard.png)
+
+- Graphs and Charts
+
+![Graphs and Charts](screenshots/graphs_and_charts.jpeg)
+
+- Orders
+
+![Orders](screenshots/orders.png)
+
+- Add Vehicle
+
+![Add Vehicle](screenshots/insertion_modal.jpeg)
+
+- Restock Modal
+
+![Restock Modal](screenshots/restock_modal.jpeg)
+
+- Additional Screenshot
+
+![Delete Vehicled](screenshots/delete_modal.jpeg)
