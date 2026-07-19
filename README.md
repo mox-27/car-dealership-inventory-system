@@ -2,6 +2,13 @@
 
 A full-stack car dealership inventory management application built as a take-home assessment.
 
+## Live Demo
+
+- **Frontend**: [https://car-dealership-inventory-system-five.vercel.app/](https://car-dealership-inventory-system-five.vercel.app/)
+- **Backend API**: [https://car-dealership-inventory-system-gjrt.onrender.com](https://car-dealership-inventory-system-gjrt.onrender.com)
+
+> **Note on Performance**: The backend is hosted on Render's free tier. If the server has been inactive, it may take **1-2 minutes** for the initial request to wake it up. Please be patient when first loading or interacting with the application!
+
 ## Repository Structure
 
 This is a monorepo containing both the backend and frontend components.
