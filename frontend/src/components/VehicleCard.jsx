@@ -4,6 +4,7 @@ import axios from 'axios';
 import { IndianRupee, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { saveOrder } from '../utils/orderStorage';
 
 /* ─── Delete Modal ─────────────────────────────────────────── */
 const DeleteModal = ({ vehicle, onConfirm, onClose }) => {
@@ -199,6 +200,7 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit, viewMode = 'grid' }) => {
     setLoading(true);
     try {
       await axios.post(`/api/vehicles/${vehicle._id}/purchase`);
+      saveOrder(user?.email, vehicle);
       toast.success('Vehicle purchased successfully!');
       setPurchased(true);
       setTimeout(() => {

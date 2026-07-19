@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { Car, LogOut, User, Shield, Moon, Sun } from 'lucide-react';
+import { Car, LogOut, User, Shield, Moon, Sun, Package } from 'lucide-react';
 import { useState } from 'react';
 
 const Layout = () => {
@@ -55,6 +55,15 @@ const Layout = () => {
                       </span>
                     )}
                   </div>
+
+                  {/* Orders link */}
+                  <Link
+                    to="/orders"
+                    className="flex items-center gap-1.5 text-xs font-mono font-medium uppercase tracking-wider text-[var(--text-secondary)] hover:text-[var(--ink)] transition-colors"
+                  >
+                    <Package className="h-4 w-4" />
+                    <span className="hidden sm:inline">Orders</span>
+                  </Link>
 
                   {/* Logout button */}
                   <button

@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Orders from './pages/Orders';
 import Home from './pages/Home';
 import { Toaster } from 'react-hot-toast';
 
@@ -33,6 +34,7 @@ function App() {
             
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/orders" element={<Orders />} />
             </Route>
           </Route>
         </Routes>
