@@ -13,7 +13,7 @@ const Layout = () => {
   const isHome = location.pathname === '/';
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-[var(--paper)]">
+    <div className="overflow-hidden flex flex-col bg-[var(--paper)]">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[var(--paper)] spec-border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

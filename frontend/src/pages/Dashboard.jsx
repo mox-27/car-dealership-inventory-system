@@ -4,6 +4,7 @@ import VehicleCard from '../components/VehicleCard';
 import SearchFilter from '../components/SearchFilter';
 import VehicleForm from '../components/VehicleForm';
 import BulkImportModal from '../components/BulkImportModal';
+import AdminAnalytics from '../components/AdminAnalytics';
 import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package, LayoutGrid, List, FileJson } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -148,6 +149,11 @@ const Dashboard = () => {
         <div className="flex-1"><StatItem label="Out of Stock" value={totalVehicles - inStock} colorClass="text-[var(--out-of-stock)]" /></div>
       </div>
 
+      {/* Admin Analytics */}
+      {isAdmin && (
+        <AdminAnalytics vehicles={vehicles} />
+      )}
+
       {/* Vehicle Form */}
       {showForm && (
         <VehicleForm
@@ -173,7 +179,7 @@ const Dashboard = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 min-w-0 overflow-y-auto pr-2 pb-0">
+        <div className="flex-1 min-w-0 overflow-y-auto pr-2 pb-0 h-screen">
           {/* View toggle + count bar */}
           <div className="flex items-center justify-between mb-4">
             <p className="font-mono text-xs text-[var(--text-muted)] uppercase tracking-widest">
