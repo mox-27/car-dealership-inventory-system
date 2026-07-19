@@ -184,7 +184,7 @@ const RestockModal = ({ vehicle, onConfirm, onClose }) => {
 };
 
 /* ─── Vehicle Card ──────────────────────────────────────────── */
-const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
+const VehicleCard = ({ vehicle, onUpdate, onEdit, viewMode = 'grid' }) => {
   const [loading, setLoading] = useState(false);
   const [purchased, setPurchased] = useState(false);
   const [showRestockModal, setShowRestockModal] = useState(false);
@@ -229,7 +229,8 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
     if (onUpdate) onUpdate();
   };
 
-  return (
+  /* ─── Shared Modals ──────────────────────────────────────── */
+  const modals = (
     <>
       {showRestockModal && (
         <RestockModal
@@ -245,6 +246,92 @@ const VehicleCard = ({ vehicle, onUpdate, onEdit }) => {
           onClose={() => setShowDeleteModal(false)}
         />
       )}
+    </>
+  );
+
+  /* ─── List View ──────────────────────────────────────────── */
+  if (viewMode === 'list') {
+    return (
+      <>
+        {modals}
+        <div className="spec-panel flex flex-col sm:flex-row sm:items-center gap-3 p-4">
+          {/* Name + Category */}
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display text-lg text-[var(--ink)] leading-none truncate">
+              {vehicle.make} {vehicle.model}
+            </h3>
+            <span className="spec-tag mt-1 inline-block">{vehicle.category}</span>
+          </div>
+
+          {/* Price */}
+          <div className="font-mono text-base font-medium text-[var(--ink)] tracking-tight flex items-center flex-shrink-0">
+            <IndianRupee className="h-3.5 w-3.5 mr-0.5" />
+            {vehicle.price.toLocaleString('en-IN')}
+          </div>
+
+          {/* Stock badge + qty */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {isOutOfStock ? (
+              <span className="stamp-badge stamp-out-of-stock">OUT OF STOCK</span>
+            ) : (
+              <span className="stamp-badge stamp-in-stock">IN STOCK</span>
+            )}
+            <span className="font-mono text-xs text-[var(--text-secondary)]">
+              QTY: <span className="font-bold text-[var(--ink)]">{vehicle.quantity}</span>
+            </span>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={handlePurchase}
+              disabled={isOutOfStock || loading || purchased}
+              className={`py-1.5 px-4 text-xs flex items-center justify-center ${
+                purchased
+                  ? 'btn-outline border-[var(--in-stock)] text-[var(--in-stock)]'
+                  : isOutOfStock
+                  ? 'btn-outline opacity-50'
+                  : 'btn-signal'
+              }`}
+            >
+              {loading ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : purchased ? (
+                'PURCHASED'
+              ) : isOutOfStock ? (
+                'N/A'
+              ) : (
+                'PURCHASE'
+              )}
+            </button>
+
+            {isAdmin && (
+              <>
+                <button onClick={onEdit} disabled={loading} className="btn-outline py-1.5 px-3 text-xs text-[var(--text-secondary)]">
+                  EDIT
+                </button>
+                <button onClick={() => setShowRestockModal(true)} disabled={loading} className="btn-outline py-1.5 px-3 text-xs text-[var(--text-secondary)]">
+                  RESTOCK
+                </button>
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  disabled={loading}
+                  className="btn-outline border-[var(--out-of-stock)] text-[var(--out-of-stock)] hover:bg-[var(--out-of-stock)] hover:text-white py-1.5 px-3 text-xs"
+                >
+                  DELETE
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  /* ─── Grid View (default) ────────────────────────────────── */
+  return (
+    <>
+      {modals}
 
       <div className="spec-panel flex flex-col h-full">
         {/* Header row */}

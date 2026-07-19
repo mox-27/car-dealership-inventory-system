@@ -3,7 +3,7 @@ import axios from 'axios';
 import VehicleCard from '../components/VehicleCard';
 import SearchFilter from '../components/SearchFilter';
 import VehicleForm from '../components/VehicleForm';
-import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package } from 'lucide-react';
+import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package, LayoutGrid, List } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -23,6 +23,7 @@ const Dashboard = () => {
   const isAdmin = user?.role === 'admin';
   const [showForm, setShowForm] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState(null);
+  const [viewMode, setViewMode] = useState('grid');
 
   const fetchVehicles = useCallback(async (filters = {}) => {
     setLoading(true);
@@ -129,7 +130,38 @@ const Dashboard = () => {
 
         {/* Main Content */}
         <div className="flex-1 min-w-0 overflow-y-auto pr-2 pb-4">
-          {/* Vehicle grid */}
+          {/* View toggle + count bar */}
+          <div className="flex items-center justify-between mb-4">
+            <p className="font-mono text-xs text-[var(--text-muted)] uppercase tracking-widest">
+              {vehicles.length} {vehicles.length === 1 ? 'RESULT' : 'RESULTS'}
+            </p>
+            <div className="flex items-center border spec-border">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-1.5 transition-colors ${
+                  viewMode === 'grid'
+                    ? 'bg-[var(--ink)] text-[var(--paper)]'
+                    : 'text-[var(--text-muted)] hover:text-[var(--ink)]'
+                }`}
+                title="Grid View"
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-1.5 transition-colors border-l spec-border ${
+                  viewMode === 'list'
+                    ? 'bg-[var(--ink)] text-[var(--paper)]'
+                    : 'text-[var(--text-muted)] hover:text-[var(--ink)]'
+                }`}
+                title="List View"
+              >
+                <List className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Vehicle grid/list */}
           {loading ? (
             <div className="flex justify-center py-16">
               <p className="text-xs font-mono uppercase tracking-widest text-[var(--text-muted)] animate-pulse">UPDATING...</p>
@@ -139,7 +171,10 @@ const Dashboard = () => {
               <p className="text-sm font-mono uppercase tracking-widest text-[var(--ink)]">No vehicles match these filters</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className={viewMode === 'grid'
+              ? 'grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3'
+              : 'flex flex-col gap-3'
+            }>
               {vehicles.map((vehicle, i) => (
                 <div
                   key={vehicle._id}
@@ -150,6 +185,7 @@ const Dashboard = () => {
                     vehicle={vehicle}
                     onUpdate={handleUpdate}
                     onEdit={() => handleEdit(vehicle)}
+                    viewMode={viewMode}
                   />
                 </div>
               ))}
