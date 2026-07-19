@@ -10,6 +10,8 @@ const Layout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
+  const isHome = location.pathname === '/';
+
   return (
     <div className="h-screen overflow-hidden flex flex-col bg-[var(--paper)]">
       {/* Header */}
@@ -17,7 +19,7 @@ const Layout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group">
+            <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-2 group">
               <Car className="h-5 w-5 text-[var(--ink)]" />
               <div>
                 <span className="font-display text-2xl text-[var(--ink)] tracking-widest">AutoVerse</span>
@@ -35,7 +37,7 @@ const Layout = () => {
                 {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
 
-              {user && (
+              {user ? (
                 <>
                   {/* User info chip */}
                   <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 border spec-border bg-[var(--panel)]">
@@ -63,6 +65,13 @@ const Layout = () => {
                     <span className="hidden sm:inline">Logout</span>
                   </button>
                 </>
+              ) : (
+                <Link 
+                  to="/login"
+                  className="btn-outline px-4 py-1.5 text-xs font-mono uppercase tracking-wider"
+                >
+                  Login
+                </Link>
               )}
             </div>
           </div>
@@ -70,7 +79,7 @@ const Layout = () => {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col overflow-hidden">
+      <main className={`flex-1 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col ${isHome ? 'overflow-y-auto no-scrollbar' : 'overflow-hidden'}`}>
         <Outlet />
       </main>
 

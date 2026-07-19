@@ -20,7 +20,7 @@ const Register = () => {
       await axios.post('/api/auth/register', { name, email, password });
       const loginResponse = await axios.post('/api/auth/login', { email, password });
       login(loginResponse.data.token);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.error?.message || 'Registration failed');
     } finally {

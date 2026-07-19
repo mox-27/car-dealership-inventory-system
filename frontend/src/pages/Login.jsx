@@ -18,7 +18,7 @@ const Login = () => {
     try {
       const response = await axios.post('/api/auth/login', { email, password });
       login(response.data.token);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.error?.message || 'Login failed. Please check your credentials.');
     } finally {
