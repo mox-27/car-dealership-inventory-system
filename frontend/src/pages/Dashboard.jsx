@@ -171,7 +171,7 @@ const Dashboard = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 min-w-0 overflow-y-auto pr-2 pb-4">
+        <div className="flex-1 min-w-0 overflow-y-auto pr-2 pb-0">
           {/* View toggle + count bar */}
           <div className="flex items-center justify-between mb-4">
             <p className="font-mono text-xs text-[var(--text-muted)] uppercase tracking-widest">

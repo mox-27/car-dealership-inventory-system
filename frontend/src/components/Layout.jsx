@@ -79,13 +79,13 @@ const Layout = () => {
       </header>
 
       {/* Main content */}
-      <main className={`flex-1 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col ${isHome ? 'overflow-y-auto no-scrollbar' : 'overflow-hidden'}`}>
+      <main className={`flex-1 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 flex flex-col ${isHome ? 'overflow-y-auto no-scrollbar' : 'overflow-hidden'}`}>
         <Outlet />
       </main>
 
       {/* Footer */}
       <footer className="relative z-10 mt-auto bg-[var(--paper)] spec-border-t">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div className="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <Car className="h-4 w-4 text-[var(--ink)]" />
             <span className="text-xs font-mono uppercase tracking-widest text-[var(--ink)]">AutoVerse</span>
