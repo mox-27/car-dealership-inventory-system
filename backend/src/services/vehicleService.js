@@ -25,6 +25,37 @@ export const addVehicle = async (vehicleData) => {
 };
 
 /**
+ * Creates multiple new vehicles in the database, ignoring duplicates.
+ * @param {Array} vehiclesData - Array of vehicle objects
+ * @returns {Promise<Object>} Results containing insertedCount
+ */
+export const bulkAddVehicles = async (vehiclesData) => {
+  if (!Array.isArray(vehiclesData)) {
+    const error = new Error('Input must be an array of vehicles');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  try {
+    // ordered: false ensures that if some fail (e.g. duplicates), the rest still insert
+    const result = await Vehicle.insertMany(vehiclesData, { ordered: false });
+    return {
+      insertedCount: result.length,
+      failedCount: 0,
+    };
+  } catch (error) {
+    // MongoBulkWriteError occurs when some inserts fail (e.g. duplicate keys)
+    if (error.name === 'MongoBulkWriteError' || error.name === 'BulkWriteError') {
+      return {
+        insertedCount: error.insertedCount || 0,
+        failedCount: error.writeErrors ? error.writeErrors.length : 0,
+      };
+    }
+    throw error;
+  }
+};
+
+/**
  * Retrieves all vehicles from the database.
  * @returns {Promise<Array>} List of vehicles
  */

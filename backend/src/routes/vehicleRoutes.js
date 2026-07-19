@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate, authorizeAdmin } from '../middleware/auth.js';
-import { create, list, update, remove, search, purchase, restock } from '../controllers/vehicleController.js';
+import { create, list, update, remove, search, purchase, restock, bulkCreate } from '../controllers/vehicleController.js';
 
 const router = Router();
 
@@ -8,6 +8,7 @@ const router = Router();
 router.use(authenticate);
 
 router.post('/', create);
+router.post('/bulk', bulkCreate);
 router.get('/search', search); // Must be before /:id if we add it
 router.get('/', list);
 router.put('/:id', update);

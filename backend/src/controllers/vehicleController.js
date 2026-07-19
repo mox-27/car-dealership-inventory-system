@@ -6,6 +6,7 @@ import {
   searchVehicles,
   purchaseVehicle,
   restockVehicle,
+  bulkAddVehicles,
 } from '../services/vehicleService.js';
 
 /**
@@ -14,6 +15,14 @@ import {
 export const create = async (req, res) => {
   const vehicle = await addVehicle(req.body);
   res.status(201).json({ vehicle });
+};
+
+/**
+ * Handles POST /api/vehicles/bulk — create multiple vehicles.
+ */
+export const bulkCreate = async (req, res) => {
+  const result = await bulkAddVehicles(req.body.vehicles);
+  res.status(201).json(result);
 };
 
 /**

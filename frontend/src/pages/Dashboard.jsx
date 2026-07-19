@@ -3,7 +3,8 @@ import axios from 'axios';
 import VehicleCard from '../components/VehicleCard';
 import SearchFilter from '../components/SearchFilter';
 import VehicleForm from '../components/VehicleForm';
-import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package, LayoutGrid, List } from 'lucide-react';
+import BulkImportModal from '../components/BulkImportModal';
+import { AlertCircle, Loader2, Plus, Car, TrendingUp, Package, LayoutGrid, List, FileJson } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -22,6 +23,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   const [showForm, setShowForm] = useState(false);
+  const [showBulkImport, setShowBulkImport] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [viewMode, setViewMode] = useState('grid');
 
@@ -66,6 +68,29 @@ const Dashboard = () => {
     }
   };
 
+  const handleBulkImport = async (vehiclesData) => {
+    try {
+      const response = await axios.post('/api/vehicles/bulk', { vehicles: vehiclesData });
+      const { insertedCount, failedCount } = response.data;
+      
+      if (insertedCount > 0 && failedCount === 0) {
+        toast.success(`Successfully imported ${insertedCount} vehicles`);
+      } else if (insertedCount > 0 && failedCount > 0) {
+        toast.success(`Imported ${insertedCount} vehicles. Skipped ${failedCount} duplicates.`);
+      } else if (insertedCount === 0 && failedCount > 0) {
+        toast.error(`All ${failedCount} vehicles were skipped (duplicates).`);
+      } else {
+        toast.success('No vehicles processed');
+      }
+      
+      setShowBulkImport(false);
+      handleUpdate();
+    } catch (err) {
+      toast.error(err.response?.data?.error?.message || 'Bulk import failed');
+      throw err; // To let the modal handle loading state if needed
+    }
+  };
+
   const handleEdit = (vehicle) => {
     setEditingVehicle(vehicle);
     setShowForm(true);
@@ -95,13 +120,22 @@ const Dashboard = () => {
           </h1>
         </div>
         {isAdmin && (
-          <button
-            onClick={() => { setEditingVehicle(null); setShowForm(true); }}
-            className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs self-start sm:self-end"
-          >
-            <Plus className="h-4 w-4" />
-            Add Vehicle
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-end">
+            <button
+              onClick={() => setShowBulkImport(true)}
+              className="btn-outline flex items-center gap-2 px-4 py-2.5 text-xs"
+            >
+              <FileJson className="h-4 w-4" />
+              Bulk Import
+            </button>
+            <button
+              onClick={() => { setEditingVehicle(null); setShowForm(true); }}
+              className="btn-primary flex items-center gap-2 px-5 py-2.5 text-xs"
+            >
+              <Plus className="h-4 w-4" />
+              Add Vehicle
+            </button>
+          </div>
         )}
       </div>
 
@@ -118,6 +152,14 @@ const Dashboard = () => {
           vehicle={editingVehicle}
           onSubmit={handleFormSubmit}
           onCancel={() => { setShowForm(false); setEditingVehicle(null); }}
+        />
+      )}
+
+      {/* Bulk Import Modal */}
+      {showBulkImport && (
+        <BulkImportModal
+          onSubmit={handleBulkImport}
+          onClose={() => setShowBulkImport(false)}
         />
       )}
 

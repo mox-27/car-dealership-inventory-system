@@ -95,6 +95,40 @@ describe('Vehicle CRUD', () => {
     });
   });
 
+  describe('POST /api/vehicles/bulk', () => {
+    it('should bulk insert vehicles and ignore duplicates', async () => {
+      // Insert one vehicle first
+      await request(app)
+        .post('/api/vehicles')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send({ make: 'Honda', model: 'Accord', category: 'Sedan', price: 20000, quantity: 5 });
+
+      const bulkData = {
+        vehicles: [
+          { make: 'Honda', model: 'Accord', category: 'Sedan', price: 22000, quantity: 2 }, // Duplicate
+          { make: 'Nissan', model: 'Altima', category: 'Sedan', price: 21000, quantity: 3 }, // New
+          { make: 'Chevrolet', model: 'Malibu', category: 'Sedan', price: 19000, quantity: 4 } // New
+        ]
+      };
+
+      const res = await request(app)
+        .post('/api/vehicles/bulk')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(bulkData);
+
+      expect(res.statusCode).toBe(201);
+      expect(res.body.insertedCount).toBe(2);
+      expect(res.body.failedCount).toBe(1);
+
+      // Verify they are in DB
+      const getRes = await request(app)
+        .get('/api/vehicles')
+        .set('Authorization', `Bearer ${userToken}`);
+      
+      expect(getRes.body.vehicles.length).toBe(3); // Accord + Altima + Malibu
+    });
+  });
+
   describe('GET /api/vehicles', () => {
     it('should list all vehicles', async () => {
       // Create a vehicle first
