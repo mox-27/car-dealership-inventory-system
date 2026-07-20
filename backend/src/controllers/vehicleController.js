@@ -7,6 +7,7 @@ import {
   purchaseVehicle,
   restockVehicle,
   bulkAddVehicles,
+  getAnalytics,
 } from '../services/vehicleService.js';
 
 /**
@@ -26,19 +27,29 @@ export const bulkCreate = async (req, res) => {
 };
 
 /**
- * Handles GET /api/vehicles — list all vehicles.
+ * Handles GET /api/vehicles — list all vehicles (paginated).
  */
-export const list = async (_req, res) => {
-  const vehicles = await getAllVehicles();
-  res.status(200).json({ vehicles });
+export const list = async (req, res) => {
+  const { page, limit } = req.query;
+  const result = await searchVehicles({ page, limit });
+  res.status(200).json(result);
 };
 
 /**
  * Handles GET /api/vehicles/search — filter vehicles.
  */
 export const search = async (req, res) => {
+  const { make, model, category, minPrice, maxPrice, page, limit } = req.query;
+  const result = await searchVehicles({ make, model, category, minPrice, maxPrice, page, limit });
+  res.status(200).json(result);
+};
+
+/**
+ * Handles GET /api/vehicles/analytics — get unpaginated filtered data for analytics.
+ */
+export const analytics = async (req, res) => {
   const { make, model, category, minPrice, maxPrice } = req.query;
-  const vehicles = await searchVehicles({ make, model, category, minPrice, maxPrice });
+  const vehicles = await getAnalytics({ make, model, category, minPrice, maxPrice });
   res.status(200).json({ vehicles });
 };
 

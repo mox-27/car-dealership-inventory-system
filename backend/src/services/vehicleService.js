@@ -65,11 +65,37 @@ export const getAllVehicles = async () => {
 };
 
 /**
- * Searches for vehicles based on query filters.
- * @param {Object} query - { make, model, category, minPrice, maxPrice }
- * @returns {Promise<Array>} List of filtered vehicles
+ * Searches for vehicles based on query filters with pagination.
+ * @param {Object} query - { make, model, category, minPrice, maxPrice, page, limit }
+ * @returns {Promise<Object>} { vehicles, totalCount, hasMore }
  */
-export const searchVehicles = async ({ make, model, category, minPrice, maxPrice }) => {
+export const searchVehicles = async ({ make, model, category, minPrice, maxPrice, page = 1, limit = 12 }) => {
+  const filter = {};
+
+  if (make) filter.make = new RegExp(make, 'i');
+  if (model) filter.model = new RegExp(model, 'i');
+  if (category) filter.category = new RegExp(category, 'i');
+
+  if (minPrice !== undefined || maxPrice !== undefined) {
+    filter.price = {};
+    if (minPrice !== undefined) filter.price.$gte = Number(minPrice);
+    if (maxPrice !== undefined) filter.price.$lte = Number(maxPrice);
+  }
+
+  const skip = (page - 1) * limit;
+  const vehicles = await Vehicle.find(filter).skip(skip).limit(Number(limit));
+  const totalCount = await Vehicle.countDocuments(filter);
+  const hasMore = (skip + vehicles.length) < totalCount;
+
+  return { vehicles, totalCount, hasMore };
+};
+
+/**
+ * Retrieves unpaginated analytics data for the admin dashboard based on filters.
+ * @param {Object} query - { make, model, category, minPrice, maxPrice }
+ * @returns {Promise<Array>} List of filtered vehicles for analytics
+ */
+export const getAnalytics = async ({ make, model, category, minPrice, maxPrice }) => {
   const filter = {};
 
   if (make) filter.make = new RegExp(make, 'i');

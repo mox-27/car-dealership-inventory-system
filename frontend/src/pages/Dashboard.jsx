@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import VehicleCard from '../components/VehicleCard';
 import SearchFilter from '../components/SearchFilter';
@@ -28,29 +28,70 @@ const Dashboard = () => {
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [viewMode, setViewMode] = useState('grid');
 
-  const fetchVehicles = useCallback(async (filters = {}) => {
-    setLoading(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [updateToggle, setUpdateToggle] = useState(false);
+
+  const fetchVehicles = useCallback(async (filters = {}, pageNum = 1, append = false) => {
+    if (pageNum === 1) setLoading(true);
+    else setLoadingMore(true);
+
     try {
       const params = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
         if (value) params.append(key, value);
       });
-      const endpoint = params.toString() ? `/api/vehicles/search?${params.toString()}` : '/api/vehicles';
+      params.append('page', pageNum);
+      params.append('limit', 12);
+      
+      const endpoint = `/api/vehicles/search?${params.toString()}`;
       const response = await axios.get(endpoint);
-      setVehicles(response.data.vehicles);
+      
+      const newVehicles = response.data.vehicles;
+      setHasMore(response.data.hasMore);
+      setTotalCount(response.data.totalCount || 0);
+
+      setVehicles(prev => append ? [...prev, ...newVehicles] : newVehicles);
     } catch (err) {
       toast.error('Failed to load vehicles. Please try again later.');
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchVehicles(currentFilters);
+    setPage(1);
+    fetchVehicles(currentFilters, 1, false);
   }, [fetchVehicles, currentFilters]);
 
+  const observer = useRef();
+  const lastElementRef = useCallback(node => {
+    if (loading || loadingMore) return;
+    if (observer.current) observer.current.disconnect();
+    
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prevPage => {
+          const nextPage = prevPage + 1;
+          fetchVehicles(currentFilters, nextPage, true);
+          return nextPage;
+        });
+      }
+    });
+    
+    if (node) observer.current.observe(node);
+  }, [loading, loadingMore, hasMore, fetchVehicles, currentFilters]);
+
   const handleSearch = (filters) => setCurrentFilters(filters);
-  const handleUpdate = () => fetchVehicles(currentFilters);
+  
+  const handleUpdate = () => {
+    setPage(1);
+    fetchVehicles(currentFilters, 1, false);
+    setUpdateToggle(prev => !prev);
+  };
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -151,7 +192,7 @@ const Dashboard = () => {
 
       {/* Admin Analytics */}
       {isAdmin && (
-        <AdminAnalytics vehicles={vehicles} />
+        <AdminAnalytics filters={currentFilters} onUpdateToggle={updateToggle} />
       )}
 
       {/* Vehicle Form */}
@@ -183,7 +224,7 @@ const Dashboard = () => {
           {/* View toggle + count bar */}
           <div className="flex items-center justify-between mb-4">
             <p className="font-mono text-xs text-[var(--text-muted)] uppercase tracking-widest">
-              {vehicles.length} {vehicles.length === 1 ? 'RESULT' : 'RESULTS'}
+              {totalCount} {totalCount === 1 ? 'RESULT' : 'RESULTS'}
             </p>
             <div className="flex items-center border spec-border">
               <button
@@ -225,20 +266,30 @@ const Dashboard = () => {
               ? 'grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3'
               : 'flex flex-col gap-3'
             }>
-              {vehicles.map((vehicle, i) => (
-                <div
-                  key={vehicle._id}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${i * 60}ms`, animationFillMode: 'both' }}
-                >
-                  <VehicleCard
-                    vehicle={vehicle}
-                    onUpdate={handleUpdate}
-                    onEdit={() => handleEdit(vehicle)}
-                    viewMode={viewMode}
-                  />
+              {vehicles.map((vehicle, i) => {
+                const isLastElement = i === vehicles.length - 1;
+                return (
+                  <div
+                    key={vehicle._id}
+                    ref={isLastElement ? lastElementRef : null}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${(i % 12) * 60}ms`, animationFillMode: 'both' }}
+                  >
+                    <VehicleCard
+                      vehicle={vehicle}
+                      onUpdate={handleUpdate}
+                      onEdit={() => handleEdit(vehicle)}
+                      viewMode={viewMode}
+                    />
+                  </div>
+                );
+              })}
+              
+              {loadingMore && (
+                <div className="col-span-full flex justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-[var(--text-muted)]" />
                 </div>
-              ))}
+              )}
             </div>
           )}
         </div>

@@ -1,12 +1,34 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import axios from 'axios';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { Activity, LayoutGrid, PieChart as PieChartIcon, BarChart2, IndianRupee } from 'lucide-react';
 
-const AdminAnalytics = ({ vehicles }) => {
+const AdminAnalytics = ({ filters, onUpdateToggle }) => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [vehicles, setVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const params = new URLSearchParams();
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value) params.append(key, value);
+        });
+        const endpoint = params.toString() ? `/api/vehicles/analytics?${params.toString()}` : '/api/vehicles/analytics';
+        const response = await axios.get(endpoint);
+        setVehicles(response.data.vehicles);
+      } catch (err) {
+        console.error('Failed to load analytics', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAnalytics();
+  }, [filters, onUpdateToggle]);
 
   // Aggregate data for Pie Chart: Inventory by Category
   const categoryData = useMemo(() => {
