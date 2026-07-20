@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Orders from './pages/Orders';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import ErrorBoundary from './components/ErrorBoundary';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             fontSize: '0.875rem'
           } 
         }} />
+        <ErrorBoundary>
           <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -42,6 +44,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
+        </ErrorBoundary>
         </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>
