@@ -391,6 +391,59 @@ Implement a shopping cart using localStorage to persist selected vehicles.
 
 ## Admin Dashboard Analytics
 
+## Prompt
+
 ```text
-Display statistical graphs in the Admin dashboard to improve the user experience.
+Display statistical graphs on the Admin Dashboard to improve the user experience.
 ```
+
+---
+
+## Mobile Responsiveness
+
+## Prompt
+
+```text
+Fix the mobile layout so the application displays properly on all screen sizes without requiring users to zoom out.
+```
+
+---
+
+## Infinite Scrolling
+
+## Prompt
+
+```text
+Implement infinite scrolling (lazy loading) for the existing Cards page without changing its current UI or functionality.
+```
+
+---
+
+## Frontend Error Handling
+
+## Prompt
+
+```text
+Improve error handling across the entire frontend to provide consistent and user-friendly error messages.
+```
+
+---
+
+## Form Validation
+
+## Prompt
+
+```text
+Add proper input validation for the Register and Login forms.
+
+Validate email addresses using a proper email format.
+
+Enforce strong password requirements, including:
+- At least one uppercase letter
+- At least one lowercase letter
+- At least one number
+- At least one special character
+- A minimum password length
+```
+
+---

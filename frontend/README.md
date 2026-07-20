@@ -3,12 +3,14 @@
 This is the React frontend for the AutoVerse Car Dealership Inventory System. It was built using Vite, React (Functional Components + Hooks), Tailwind CSS v4, and React Testing Library + Vitest.
 
 ## Prerequisites
+
 - Node.js (v18 or higher recommended)
 - The [Backend API](../backend/README.md) must be running.
 
 ## Getting Started
 
 1. **Install Dependencies**
+
    ```bash
    cd frontend
    npm install
@@ -36,10 +38,8 @@ npm run test:watch
 ```
 
 ## Features
+
 - **Public**: Browse inventory, search by make/model, filter by category and price.
 - **Authentication**: JWT-based login and registration.
 - **Customers**: Purchase vehicles (decrements stock).
 - **Admins**: Add, edit, delete, and restock vehicles.
-
-## Screenshots
-*(Add screenshots here after running the application)*
