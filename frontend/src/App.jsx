@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Orders from './pages/Orders';
 import Home from './pages/Home';
+import NotFound from './pages/NotFound';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -36,6 +37,9 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/orders" element={<Orders />} />
             </Route>
+
+            {/* Catch-all 404 Route */}
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
         </ThemeProvider>

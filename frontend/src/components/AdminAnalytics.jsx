@@ -127,7 +127,7 @@ const AdminAnalytics = ({ vehicles }) => {
 
   return (
     <div className="flex-shrink-0 flex flex-col gap-4 mt-6 mb-2">
-      <div className="flex items-center justify-between px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
         <div className="flex items-center gap-2">
           <Activity className="h-4 w-4 text-[var(--ink)]" />
           <h2 className="font-display text-lg text-[var(--ink)]">Inventory Analytics</h2>

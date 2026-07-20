@@ -142,11 +142,11 @@ const Dashboard = () => {
       </div>
 
       {/* Stats row */}
-      <div className="flex-shrink-0 spec-panel flex flex-row justify-between w-full divide-x divide-[var(--line)]">
-        <div className="flex-1"><StatItem label="Total Models" value={totalVehicles} /></div>
-        <div className="flex-1"><StatItem label="In Stock" value={inStock} /></div>
-        <div className="flex-1"><StatItem label="Low Stock" value={lowStock} colorClass="text-[var(--signal)]" /></div>
-        <div className="flex-1"><StatItem label="Out of Stock" value={totalVehicles - inStock} colorClass="text-[var(--out-of-stock)]" /></div>
+      <div className="flex-shrink-0 spec-panel grid grid-cols-2 md:grid-cols-4 w-full">
+        <div className="border-b md:border-b-0 border-r border-[var(--line)]"><StatItem label="Total Models" value={totalVehicles} /></div>
+        <div className="border-b md:border-b-0 md:border-r border-[var(--line)]"><StatItem label="In Stock" value={inStock} /></div>
+        <div className="border-r border-[var(--line)]"><StatItem label="Low Stock" value={lowStock} colorClass="text-[var(--signal)]" /></div>
+        <div><StatItem label="Out of Stock" value={totalVehicles - inStock} colorClass="text-[var(--out-of-stock)]" /></div>
       </div>
 
       {/* Admin Analytics */}
