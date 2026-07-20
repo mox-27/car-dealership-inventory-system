@@ -14,6 +14,19 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error('Password must be at least 8 characters and contain uppercase, lowercase, number, and special character.');
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.post('/api/auth/login', { email, password });
@@ -71,7 +84,7 @@ const Login = () => {
                   name="password"
                   type="password"
                   required
-                  placeholder="••••••••"
+                  placeholder="Min. 8 chars, uppercase, lowercase, num, special"
                   className="input-theme w-full pl-10 pr-4 py-3 text-sm font-mono"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

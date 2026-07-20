@@ -51,7 +51,7 @@ describe('Auth Flow', () => {
       
       const user = userEvent.setup();
       await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'wrongpass');
+      await user.type(screen.getByLabelText(/password/i), 'WrongPass123!');
       await user.click(screen.getByRole('button', { name: /authenticate/i }));
 
       await waitFor(() => {
@@ -80,7 +80,7 @@ describe('Auth Flow', () => {
       const user = userEvent.setup();
       await user.type(screen.getByLabelText(/name/i), 'Test User');
       await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-      await user.type(screen.getByLabelText(/password/i), 'password123');
+      await user.type(screen.getByLabelText(/password/i), 'Password123!');
       await user.click(screen.getByRole('button', { name: /register/i }));
 
       await waitFor(() => {
