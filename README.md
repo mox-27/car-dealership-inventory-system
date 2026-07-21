@@ -45,6 +45,12 @@ You will need two terminal windows to run the full stack application.
    ```
    _(Frontend runs on http://localhost:5173 and proxies API calls to the backend)_
 
+```
+ADMIN Credentials:
+admin_email: admin@autoverse.com
+admin_password : Admin@2026
+```
+
 ## My AI Usage
 
 **AI Tool Used**: Google Gemini, Claude (via an integrated Agentic AI coding assistant)
